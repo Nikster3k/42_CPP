@@ -37,8 +37,7 @@ std::string	truncate_string(std::string str, std::size_t len)
 
 void	Contact::PrintListInfo(int index)
 {
-	std::cout << "|"; 
-	std::cout << std::setw(10) << std::setiosflags(std::ios::right) << index << "|";
+	std::cout << index << "|";
 	std::cout << std::setw(10) << std::setiosflags(std::ios::right) << truncate_string(firstname, 10) << "|";
 	std::cout << std::setw(10) << std::setiosflags(std::ios::right) << truncate_string(lastname, 10) << "|";
 	std::cout << std::setw(10) << std::setiosflags(std::ios::right) << truncate_string(nickname, 10) << "|" << std::endl;
