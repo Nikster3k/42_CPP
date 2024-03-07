@@ -4,7 +4,6 @@
 
 int	main(void)
 {
-	PhoneBook pb = PhoneBook();
-	pb.Prompt();
+	PhoneBook().prompt();
 	return (0);
 }

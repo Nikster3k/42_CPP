@@ -6,7 +6,7 @@
 /*   By: nsassenb <nsassenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 14:45:05 by nsassenb          #+#    #+#             */
-/*   Updated: 2024/03/06 18:26:35 by nsassenb         ###   ########.fr       */
+/*   Updated: 2024/03/07 14:46:03 by nsassenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,19 @@
 class Contact 
 {
 private:
-	std::string firstname;
-	std::string lastname;
+	std::string firstName;
+	std::string lastName;
 	std::string nickname;
 	std::string	phonenumber;
-	std::string	darkestsecret;
+	std::string	darkestSecret;
 
 public:
 	Contact(void);
-	void Input(void);
-	bool IsEmpty(void);
-	void PrintInfo(void);
-	void PrintListInfo(int index);
+	~Contact(void);
+	void input(void);
+	bool isEmpty(void);
+	void printInfo(void);
+	void printListInfo(int index);
 };
 
 #endif

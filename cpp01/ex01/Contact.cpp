@@ -2,27 +2,29 @@
 
 Contact::Contact(void)
 {
-	firstname = std::string();
-	lastname = std::string();
+	firstName = std::string();
+	lastName = std::string();
 	nickname = std::string();
 	phonenumber = std::string();
-	darkestsecret = std::string();
+	darkestSecret = std::string();
 }
 
-bool	Contact::IsEmpty(void)
+Contact::~Contact(void) {}
+
+bool	Contact::isEmpty(void)
 {
-	return (firstname.empty() || lastname.empty()
+	return (firstName.empty() || lastName.empty()
 		|| nickname.empty() || phonenumber.empty()
-		|| darkestsecret.empty());
+		|| darkestSecret.empty());
 }
 
-void	Contact::PrintInfo(void)
+void	Contact::printInfo(void)
 {
-	std::cout << "First name: " << firstname << std::endl;
-	std::cout << "Last name: " << lastname << std::endl;
+	std::cout << "First name: " << firstName << std::endl;
+	std::cout << "Last name: " << lastName << std::endl;
 	std::cout << "Nickname: " << nickname << std::endl;
 	std::cout << "Phonenumber: " << phonenumber << std::endl;
-	std::cout << "Darkest secret: " << darkestsecret << std::endl;
+	std::cout << "Darkest secret: " << darkestSecret << std::endl;
 }
 
 std::string	truncate_string(std::string str, std::size_t len)
@@ -35,41 +37,60 @@ std::string	truncate_string(std::string str, std::size_t len)
 	return (str);
 }
 
-void	Contact::PrintListInfo(int index)
+void	Contact::printListInfo(int index)
 {
-	std::cout << index << "|";
-	std::cout << std::setw(10) << std::setiosflags(std::ios::right) << truncate_string(firstname, 10) << "|";
-	std::cout << std::setw(10) << std::setiosflags(std::ios::right) << truncate_string(lastname, 10) << "|";
+	std::cout << "|";
+	std::cout << std::setw(10) << std::setiosflags(std::ios::right) << index << "|";
+	std::cout << std::setw(10) << std::setiosflags(std::ios::right) << truncate_string(firstName, 10) << "|";
+	std::cout << std::setw(10) << std::setiosflags(std::ios::right) << truncate_string(lastName, 10) << "|";
 	std::cout << std::setw(10) << std::setiosflags(std::ios::right) << truncate_string(nickname, 10) << "|" << std::endl;
 }
 
-void	Contact::Input(void)
+void	fixWhiteSpaces(std::string& input)
 {
-	Contact	newcontact = Contact();
-	std::cout << "Enter first name: ";
-	std::cin >> newcontact.firstname;
-	if (std::cin.eof())
-		return ;
-	std::cout << "Enter last name: ";
-	std::cin >> newcontact.lastname;
-	if (std::cin.eof())
-		return ;
-	std::cout << "Enter nick name: ";
-	std::cin >> newcontact.nickname;
-	if (std::cin.eof())
-		return ;
-	std::cout << "Enter phonenumber: ";
-	std::cin >> newcontact.phonenumber;
-	if (std::cin.eof())
-		return ;
-	std::cout << "Enter your darkest secret: ";
-	std::cin >> newcontact.darkestsecret;
-	if (std::cin.eof())
-		return ;
-	if (newcontact.IsEmpty())
+	std::string set = "\t\n\v\f\r";
+	std::size_t	i = 0;
+
+	for (std::size_t x = 0; x < set.length(); x++)
+		while ((i = input.find(set.at(x))) < input.length())
+			input.replace(i, 1, " ");
+	
+	while ((i = input.find(' ')) == 0)
+		input.replace(i, 1, "");
+	while ((i = input.find_last_of(' ')) == input.length() - 1)
+		input.replace(i, 1, "");
+}
+
+std::string	getInput(std::string prompt)
+{
+	std::string	input = std::string();
+
+	while (input.empty())
 	{
-		std::cout << "Info cannot be empty!" << std::endl;	
-		return ;
+		std::cout << prompt;
+		std::getline(std::cin, input);
+		if (std::cin.eof())	
+			return ("");
+		fixWhiteSpaces(input);
 	}
-	*this = newcontact;
+	return (input);
+}
+
+void	Contact::input(void)
+{
+	firstName = getInput("Enter first name: ");
+	if (std::cin.eof())
+		return ;
+	lastName = getInput("Enter last name: ");
+	if (std::cin.eof())
+		return ;
+	nickname = getInput("Enter nick name: ");
+	if (std::cin.eof())
+		return ;
+	phonenumber = getInput("Enter phonenumber: ");
+	if (std::cin.eof())
+		return ;
+	darkestSecret = getInput("Enter your darkest secret: ");
+	if (std::cin.eof())
+		return ;
 }
