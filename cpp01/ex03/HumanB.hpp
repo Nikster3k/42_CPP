@@ -9,10 +9,10 @@ private:
 	Weapon*		weapon;
 	std::string	name;
 public:
-	HumanB( Weapon* weapon );
+	HumanB( std::string name );
 	~HumanB();
 	void	attack( void );
-	void	setWeapon(Weapon wep);
+	void	setWeapon(Weapon& wep);
 };
 
 #endif //!HUMANB_HPP

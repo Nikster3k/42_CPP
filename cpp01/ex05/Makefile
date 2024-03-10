@@ -1,7 +1,7 @@
 NAME=	program
 FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98
 
-FILES=	main.cpp HumanA.cpp HumanB.cpp Weapon.cpp
+FILES=	main.cpp Harl.cpp
 OBJS=	$(FILES:.cpp=.o)
 
 all:	$(NAME)
