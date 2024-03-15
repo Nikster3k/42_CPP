@@ -17,4 +17,7 @@ public:
 	void	complain( std::string level ) const;
 };
 
+int	evalLevel( std::string level );
+
+
 #endif //!HARL_HPP

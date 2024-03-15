@@ -25,7 +25,7 @@ void	Harl::error(void) const
 	std::cout << "Error log!" << std::endl;
 }
 
-int	evalLevel(std::string& level)
+int	evalLevel(std::string level)
 {
 	const std::string	levels[4] = {"DEBUG", "INFO", "WARNING", "ERROR"};
 	for (int i = 0; i < 4; i++)

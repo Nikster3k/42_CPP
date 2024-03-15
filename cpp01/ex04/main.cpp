@@ -32,17 +32,19 @@ int main(int argc, char** argv)
 	std::string		replace = std::string(argv[3]);
 	file.open(filename.c_str());
 
-	if (!file.is_open())
+	if (!file.is_open() || !file.good())
 	{
 		std::cout << "Could not open file!" << std::endl;
+		file.close();
 		return (2);
 	}
 	std::ofstream	ofile(filename.append(".replace").c_str());
 
-	if (!ofile.is_open())
+	if (!ofile.is_open() || !ofile.good())
 	{
 		std::cout << "Could not open output file!" << std::endl;
 		file.close();
+		ofile.close();
 		return (3);
 	}
 
