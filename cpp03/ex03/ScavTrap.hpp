@@ -3,9 +3,8 @@
 
 #include "ClapTrap.hpp"
 #include <string>
-#include <iostream>
 
-class ScavTrap : public ClapTrap
+class ScavTrap : virtual public ClapTrap
 {
 public:
 	ScavTrap( std::string name );

@@ -6,9 +6,9 @@
 class Point
 {
 private:
-public:
 	const Fixed	x;
 	const Fixed	y;
+public:
 	Point( void );
 	Point( const float a_fX, const float a_fY );
 	Point( const Fixed a_cX, const Fixed a_cY );
