@@ -23,7 +23,7 @@ int	main(int argc, char ** argv)
 		{
 			std::string str = std::string(argv[i]);
 			for (unsigned long a = 0; a < str.length(); a++)
-				str[a] = std::toupper(str[a]);
+				str.at(a) = std::toupper(str.at(a));
 			std::cout << str << (i == argc - 1 ? "\n" : " ");
 		}
 	}

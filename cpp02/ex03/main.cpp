@@ -47,8 +47,8 @@ int main( void ) {
 	// 	std::cout << isLessThan << std::endl; // Output: 0 (false)
 	// }
 
-	{
-		Point	a(1, 1);
+	// {
+	// 	Point	a(1, 1);
 	// 	Point	b(2, 1);
 	// 	Point	c(2, 2);
 	// 	// Additional tests for bsp function
