@@ -20,21 +20,7 @@ Fixed::Fixed( const int value )
 
 Fixed::Fixed( const float number )
 {
-	int frac = 1 / (number - (int)number);
-	std::cout << 1 / (number - (int)number) << std::endl;
-	fixed = (int)number << frac_bits;
-	for (int i = 31; i >= 0; i--)
-	{
-		std::cout << ((fixed >> i) & 1); 
-	}
-	std::cout << frac << std::endl;
-	fixed |= frac & 0xFF;
-	for (int i = 31; i >= 0; i--)
-	{
-		std::cout << ((fixed >> i) & 1); 
-	}
-	std::cout << std::endl;
-	
+	fixed = roundf(number * (1 << frac_bits));
 }
 
 Fixed&	Fixed::operator= (const Fixed& obj)
@@ -60,9 +46,9 @@ void	Fixed::setRawBits(int const raw)
 	fixed = raw;
 }
 
-float	Fixed::toFloat( void ) const
+float Fixed::toFloat() const
 {
-	return ((fixed >> frac_bits) * (1 + (float)1 / (fixed & 0xFF)));
+	return ((float)fixed / (1 << frac_bits));
 }
 
 int		Fixed::toInt( void ) const
@@ -75,3 +61,4 @@ std::ostream&	operator<<(std::ostream& os, const Fixed& obj)
 	os << obj.toFloat();\
 	return (os);
 }
+

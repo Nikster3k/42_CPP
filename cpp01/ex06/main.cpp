@@ -21,7 +21,7 @@ int	main(int argc, char **argv)
 	case 2:
 		h.complain("WARNING");
 	case 3:
-		h.complain("DEBUG");
+		h.complain("ERROR");
 		break;
 	default:
 		std::cout << "[ Probably complaining about insignificant problems ]" << std::endl;

@@ -7,22 +7,22 @@ Harl::~Harl(void) {}
 
 void	Harl::debug(void) const
 {
-	std::cout << "Debug log!" << std::endl;
+	std::cout << "[ DEBUG ]\n" << "Debug log!" << std::endl;
 }
 
 void	Harl::info(void) const
 {
-	std::cout << "Info log!" << std::endl;
+	std::cout << "[ INFO ]\n" << "Info log!" << std::endl;
 }
 
 void	Harl::warning(void) const
 {
-	std::cout << "Warning log!" << std::endl;
+	std::cout << "[ WARNING ]\n" << "Warning log!" << std::endl;
 }
 
 void	Harl::error(void) const
 {
-	std::cout << "Error log!" << std::endl;
+	std::cout << "[ ERROR ]\n" << "Error log!" << std::endl;
 }
 
 int	evalLevel(std::string level)
