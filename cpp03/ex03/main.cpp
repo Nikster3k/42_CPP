@@ -29,6 +29,7 @@ int main( void )
 	trap.takeDamage(30);
 
 	trap.highFiveGuys();
+	trap.guardGate();
 
 	trap.beRepaired(500);
 	trap.beRepaired(1000);

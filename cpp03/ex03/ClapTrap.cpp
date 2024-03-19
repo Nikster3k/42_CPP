@@ -9,6 +9,26 @@ ClapTrap::ClapTrap(std::string a_sName)
 	attack_damage = 0;
 }
 
+ClapTrap::ClapTrap(const ClapTrap& obj)
+{
+	std::cout << "Copy Constructor has benn called!" << std::endl;
+	name = obj.name;
+	hit_points = obj.hit_points;
+	energy_points = obj.energy_points;
+	attack_damage = obj.attack_damage;
+}
+
+ClapTrap& ClapTrap::operator=(const ClapTrap& obj)
+{
+	if (this != &obj) {
+		name = obj.name;
+		hit_points = obj.hit_points;
+		energy_points = obj.energy_points;
+		attack_damage = obj.attack_damage;
+	}
+	return *this;
+}
+
 ClapTrap::~ClapTrap()
 {
 	std::cout << "ClapTrap Destructor has benn called for " << name << std::endl;
