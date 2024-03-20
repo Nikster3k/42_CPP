@@ -2,7 +2,7 @@
 
 ClapTrap::ClapTrap(std::string a_sName)
 {
-	std::cout << "Constructor has benn called!" << std::endl;
+	std::cout << "ClapTrap Constructor called for " << a_sName << std::endl;
 	name = a_sName;
 	hit_points = 10;
 	energy_points = 10;
@@ -11,7 +11,7 @@ ClapTrap::ClapTrap(std::string a_sName)
 
 ClapTrap::ClapTrap(const ClapTrap& obj)
 {
-	std::cout << "Copy Constructor has benn called!" << std::endl;
+	std::cout << "Copy Constructor called!" << std::endl;
 	name = obj.name;
 	hit_points = obj.hit_points;
 	energy_points = obj.energy_points;
@@ -31,7 +31,7 @@ ClapTrap& ClapTrap::operator=(const ClapTrap& obj)
 
 ClapTrap::~ClapTrap()
 {
-	std::cout << "Destructor has benn called!" << std::endl;
+	std::cout << "ClapTrap Destructor called for " << name << std::endl;
 }
 
 void ClapTrap::attack(const std::string & a_sTarget)

@@ -2,15 +2,35 @@
 
 ScavTrap::ScavTrap(std::string name) : ClapTrap(name) 
 {
-	std::cout << "ScavTrap Constructor has benn called for " << name << std::endl;
+	std::cout << "ClapTrap Constructor called for " << name << std::endl;
 	hit_points = 100;
 	energy_points = 50;
 	attack_damage = 20;
 }
 
+ScavTrap::ScavTrap(const ScavTrap& obj) : ClapTrap(obj.name)
+{
+	std::cout << "ClapTrap copy Constructor called!" << std::endl;
+	hit_points = 100;
+	energy_points = 50;
+	attack_damage = 20;
+}
+
+ScavTrap&	ScavTrap::operator= (const ScavTrap& obj)
+{
+	if (this != &obj)
+	{
+		name = obj.name;
+		attack_damage = obj.attack_damage;
+		hit_points = obj.hit_points;
+		energy_points = obj.energy_points;
+	}
+	return (*this);
+}
+
 ScavTrap::~ScavTrap()
 {
-	std::cout << "ScavTrap Destructor has benn called for " << name << std::endl;
+	std::cout << "ScavTrap Destructor called for " << name << std::endl;
 }
 
 void	ScavTrap::attack( const std::string& a_sTarget)
