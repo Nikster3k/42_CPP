@@ -8,13 +8,22 @@
 
 int main()
 {
-
 	std::cout << "=== Given tests ===" << std::endl;
 
 	const AAnimal* j = new Dog();
 	const AAnimal* i = new Cat();
 	delete j;//should not create a leak
 	delete i;
+
+	{
+		Dog* a = new Dog();
+		Dog* b = new Dog();
+		
+		*a = *b;
+		
+		delete a;
+		delete b;
+	}
 
 	std::cout << "\n\n=== Required tests ===" << std::endl;
 
@@ -38,7 +47,6 @@ int main()
 		delete animals[i];
 		std::cout << std::endl;
 	}
-	
 	
 	return 0;
 }

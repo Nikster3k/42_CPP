@@ -13,6 +13,7 @@ Animal::Animal(const Animal &obj)
 
 Animal& Animal::operator=(const Animal &obj)
 {
+	std::cout << "COPY ASSIGNMENT IN ANIMAL" << std::endl;
 	if (this != &obj)
 	{
 		type = obj.type;

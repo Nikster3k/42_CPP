@@ -28,6 +28,16 @@ int main()
 	delete j;
 	delete meta;
 
+	{
+		Dog* a = new Dog();
+		Dog* b = new Dog();
+		
+		*a = *b;
+		
+		delete a;
+		delete b;
+	}
+
 	std::cout << "=== Wrong stuff! ===" << std::endl;
 
 	const WrongAnimal*	badmeta = new WrongAnimal();
