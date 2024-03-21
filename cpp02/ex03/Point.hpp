@@ -1,8 +1,8 @@
 #ifndef POINT_HPP
 # define POINT_HPP
 
-#include "Fixed.hpp"
-
+# include "Fixed.hpp"
+# include <iostream>
 class Point
 {
 private:
@@ -18,6 +18,7 @@ public:
 
 	float	sqrLength( void );
 	float	dot( const Point& other );
+	float	crossProduct( const Point& other ) const;
 
 	Point	operator+ (const Point& obj) const;
 	Point	operator- (const Point& obj) const;

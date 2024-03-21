@@ -10,7 +10,9 @@ Point::Point(const Point& obj) : x(obj.x), y(obj.y) {}
 
 Point&	Point::operator= (const Point& obj)
 {
-	// this->x = obj.x;
+	//only const member variables
+	//nothing to do here :)
+	(void)obj;
 	return (*this);
 }
 
@@ -24,6 +26,11 @@ Point	Point::operator+ (const Point& obj) const
 Point	Point::operator- (const Point& obj) const
 {
 	return (Point(x - obj.x, y - obj.y));
+}
+
+float	Point::crossProduct(const Point& other) const
+{
+	return ((this->x * other.y) - (this->y * other.x)).toFloat();
 }
 
 float	Point::sqrLength(void)

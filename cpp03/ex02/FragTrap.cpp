@@ -33,7 +33,7 @@ FragTrap::~FragTrap()
 	std::cout << "FragTrap Destructor has benn called for " << name << std::endl;
 }
 
-void	FragTrap::highFiveGuys(void)
+void	FragTrap::highFivesGuys(void)
 {
 	std::cout << "This is a positive high five request from " << name << " FragTrap" << std::endl;
 }

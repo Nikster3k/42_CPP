@@ -10,8 +10,7 @@ protected:
 	std::string	type;
 public:
 	AMateria( std::string const & type);
-	//maybe copy constructor
-	//and copy assign? operator
+	AMateria( const AMateria& obj );
 	virtual ~AMateria();
 
 	std::string const &	getType() const;

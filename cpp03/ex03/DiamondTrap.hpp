@@ -17,6 +17,7 @@ public:
 	~DiamondTrap();
 
 	void    attack( const std::string& a_sTarget );
+	void	whoAmI( void );
 };
 
 #endif //!DIAMOND_TRAP_HPP

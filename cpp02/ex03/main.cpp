@@ -2,7 +2,8 @@
 #include "Fixed.hpp"
 #include "Point.hpp"
 
-int main( void ) {
+int main( void ) 
+{
 	// std::cout << "==Given tests==" << std::endl;
 	// {
 	// 	Fixed a;
@@ -47,28 +48,25 @@ int main( void ) {
 	// 	std::cout << isLessThan << std::endl; // Output: 0 (false)
 	// }
 
-	// {
-	// 	Point	a(1, 1);
-	// 	Point	b(2, 1);
-	// 	Point	c(2, 2);
-	// 	// Additional tests for bsp function
-	// 	std::cout << "\n==Additional tests for bsp function==\n" << std::endl;
+	{
+		Point	a(0, 0);
+		Point	b(4, 4);
+		Point	c(4, 0);
+		// Additional tests for bsp function
+		std::cout << "\n==Additional tests for bsp function==\n" << std::endl;
 
-	// 	// Test case 1: Point inside the triangle
-	// 	Point p1(2, 2);
-	// 	std::cout << "Point (" << p1.x << ", " << p1.y << ") is ";
-	// 	std::cout << (Point::bsp(p1, a, b, c) ? "inside" : "outside") << " the triangle" << std::endl;
+		// Test case 1: Point inside the triangle
+		Point p1(0, 0);
+		std::cout << (Point::bsp(a, b, c, p1) ? "inside" : "outside") << " the triangle" << std::endl;
 
-	// 	// Test case 2: Point outside the triangle
-	// 	Point p2(5, 5);
-	// 	std::cout << "Point (" << p2.x << ", " << p2.y << ") is ";
-	// 	std::cout << (Point::bsp(p2, a, b, c) ? "inside" : "outside") << " the triangle" << std::endl;
+		// Test case 2: Point outside the triangle
+		Point p2(5, 5);
+		std::cout << (Point::bsp(a, b, c, p2) ? "inside" : "outside") << " the triangle" << std::endl;
 
-	// 	// Test case 3: Point on the edge of the triangle
-	// 	Point p3(3, 1);
-	// 	std::cout << "Point (" << p3.x << ", " << p3.y << ") is ";
-	// 	std::cout << (Point::bsp(p3, a, b, c) ? "inside" : "outside") << " the triangle" << std::endl;
-	// }
+		// Test case 3: Point on the edge of the triangle
+		Point p3(3, 1);
+		std::cout << (Point::bsp(a, b, c, p3) ? "inside" : "outside") << " the triangle" << std::endl;
+	}
 
 	return 0;
 }

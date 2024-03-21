@@ -2,7 +2,7 @@
 
 ScavTrap::ScavTrap(std::string name) : ClapTrap(name) 
 {
-	std::cout << "ScavTrap Constructor has benn called for " << name << std::endl;
+	std::cout << "ScavTrap Constructor has benn called for " << this->name << std::endl;
 	hit_points = 100;
 	energy_points = 50;
 	attack_damage = 20;

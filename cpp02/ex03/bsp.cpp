@@ -1,24 +1,30 @@
 #include "Point.hpp"
 
+bool	isOnEdge(const Point a, const Point b, const Point point)
+{
+	Point	AB = b - a;
+	Point	PA = point - a;
+	Point	PB = point - b;
+
+	return (AB.sqrLength() == (PA.sqrLength() + PB.sqrLength()));
+}
+
 bool Point::bsp(Point const a, Point const b, Point const c, Point const point)
 {
-    // Compute vectors
-    Point v0 = c - a;
-    Point v1 = b - a;
-    Point v2 = point - a;
+	Point	AB = b - a;
+	Point	AC = c - a;
+	Point	CB = b - c;
+	Point	PA = point - a;
+	Point	PB = point - b;
+	Point	PC = point - c;
 
-    // Compute dot products
-    float dot00 = v0.dot(v0);
-    float dot01 = v0.dot(v1);
-    float dot02 = v0.dot(v2);
-    float dot11 = v1.dot(v1);
-    float dot12 = v1.dot(v2);
-
-    // Compute barycentric coordinates
-    float invDenom = 1.0f / (dot00 * dot11 - dot01 * dot01);
-    float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
-    float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
-
-    // Check if point is in triangle
-    return (u >= 0) && (v >= 0) && (u + v < 1);
+	Fixed	areaWhole = 0.5f * std::abs(AB.crossProduct(AC));
+	Fixed	area1 = 0.5f * std::abs(PA.crossProduct(PB));
+	Fixed	area2 = 0.5f * std::abs(PB.crossProduct(PC));
+	Fixed	area3 = 0.5f * std::abs(PC.crossProduct(PA));
+	if ((area1 + area2 + area3) != areaWhole)
+		return (false);
+	if (isOnEdge(a, b, point) || isOnEdge(b, c, point) || isOnEdge(c, a, point))
+		return (false);
+	return ((area1 + area2 + area3) == areaWhole);
 }
