@@ -6,7 +6,7 @@
 /*   By: nsassenb <nsassenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 09:08:14 by nsassenb          #+#    #+#             */
-/*   Updated: 2024/03/08 09:18:01 by nsassenb         ###   ########.fr       */
+/*   Updated: 2024/03/22 15:19:21 by nsassenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	Account::makeDeposit(int deposit)
 	++_totalNbDeposits;
 	_amount += deposit;
 	_totalAmount += deposit;
-	std::cout << deposit << ";amount:" << _amount << "nb_deposits:" << _nbDeposits << std::endl;
+	std::cout << deposit << ";amount:" << _amount << ";nb_deposits:" << _nbDeposits << std::endl;
 }
 
 bool	Account::makeWithdrawal(int withdrawal)

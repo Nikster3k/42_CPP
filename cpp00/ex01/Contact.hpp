@@ -6,16 +6,16 @@
 /*   By: nsassenb <nsassenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 14:45:05 by nsassenb          #+#    #+#             */
-/*   Updated: 2024/03/07 14:46:03 by nsassenb         ###   ########.fr       */
+/*   Updated: 2024/03/22 15:30:34 by nsassenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONTACT_H
 # define CONTACT_H
 
-#include <string>
-#include <iostream>
-#include <iomanip>
+# include <string>
+# include <iostream>
+# include <iomanip>
 
 class Contact 
 {

@@ -6,7 +6,7 @@
 /*   By: nsassenb <nsassenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 14:45:02 by nsassenb          #+#    #+#             */
-/*   Updated: 2024/03/07 14:44:15 by nsassenb         ###   ########.fr       */
+/*   Updated: 2024/03/22 15:30:18 by nsassenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 # define PHONEBOOK_H
 
 # include <iostream>
-# include <iomanip>
 # include <string>
-#include <stdlib.h>
-#include <limits>
+# include <stdlib.h>
+# include <limits>
 # include "Contact.hpp"
 
 class PhoneBook 

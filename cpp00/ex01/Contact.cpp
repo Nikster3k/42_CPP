@@ -6,7 +6,7 @@
 /*   By: nsassenb <nsassenb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 09:07:58 by nsassenb          #+#    #+#             */
-/*   Updated: 2024/03/08 09:07:59 by nsassenb         ###   ########.fr       */
+/*   Updated: 2024/03/22 15:47:53 by nsassenb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ std::string	truncate_string(std::string str, std::size_t len)
 void	Contact::printListInfo(int index)
 {
 	std::cout << "|";
-	std::cout << std::setw(10) << std::setiosflags(std::ios::right) << index << "|";
-	std::cout << std::setw(10) << std::setiosflags(std::ios::right) << truncate_string(firstName, 10) << "|";
-	std::cout << std::setw(10) << std::setiosflags(std::ios::right) << truncate_string(lastName, 10) << "|";
-	std::cout << std::setw(10) << std::setiosflags(std::ios::right) << truncate_string(nickname, 10) << "|" << std::endl;
+	std::cout << std::setw(10) << index << "|";
+	std::cout << std::setw(10) << truncate_string(firstName, 10) << "|";
+	std::cout << std::setw(10) << truncate_string(lastName, 10) << "|";
+	std::cout << std::setw(10) << truncate_string(nickname, 10) << "|" << std::endl;
 }
 
 void	fixWhiteSpaces(std::string& input)
@@ -63,13 +63,16 @@ void	fixWhiteSpaces(std::string& input)
 	std::string set = "\t\n\v\f\r";
 	std::size_t	i = 0;
 
+	if (input.empty())
+		return;
 	for (std::size_t x = 0; x < set.length(); x++)
 		while ((i = input.find(set.at(x))) < input.length())
 			input.replace(i, 1, " ");
 	
 	while ((i = input.find(' ')) == 0)
 		input.replace(i, 1, "");
-	while ((i = input.find_last_of(' ')) == input.length() - 1)
+	while (input.length() > 9
+		&& (i = input.find_last_of(' ')) == input.length() - 1)
 		input.replace(i, 1, "");
 }
 
