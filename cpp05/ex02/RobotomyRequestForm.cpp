@@ -1,13 +1,13 @@
 #include "RobotomyRequestForm.hpp"
 
 RobotomyRequestForm::RobotomyRequestForm(const std::string& target) 
-	: Form("RobotomyRequestForm", 72, 45)
+	: AForm("RobotomyRequestForm", 72, 45)
 {
 	_target = target;
 }
 
 RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm& other)
-	: Form(other.getName(), other.getSignGrade(), other.getExecGrade())
+	: AForm(other.getName(), other.getSignGrade(), other.getExecGrade())
 {
 	_target = other._target;
 }
@@ -19,8 +19,13 @@ RobotomyRequestForm& RobotomyRequestForm::operator= (const RobotomyRequestForm& 
 }
 
 RobotomyRequestForm::~RobotomyRequestForm() {}
-
+#include <cstdlib>
+#include <ctime>
 void	RobotomyRequestForm::execute(Bureaucrat const& executor) const
 {
-	//Implement distinct execute here!
+	checkExecuteRights(executor);
+	int	random = std::rand();
+	std::cout << _target << " has been " <<
+		(random > RAND_MAX / 2 ? "successfully" : "unsuccessfully")
+		<< " robotomized!" << std::endl;
 }

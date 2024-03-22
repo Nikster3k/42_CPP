@@ -25,6 +25,7 @@ public:
 	bool				isSigned( void ) const;
 	void				beSigned( const Bureaucrat& buro );
 	virtual void		execute( Bureaucrat const & executor ) const = 0;
+	void				checkExecuteRights( const Bureaucrat& executor ) const;
 
 	class GradeTooHighException : public std::exception
 	{
@@ -33,6 +34,12 @@ public:
 	};
 
 	class GradeTooLowException : public std::exception
+	{
+	public:
+		const char*	what() const throw();
+	};
+
+	class FormNotSignedException : public std::exception
 	{
 	public:
 		const char*	what() const throw();

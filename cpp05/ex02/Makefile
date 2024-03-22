@@ -1,7 +1,8 @@
 NAME=	program
 FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98 -g
 
-FILES=	main.cpp Bureaucrat.cpp AForm.cpp
+FILES=	main.cpp Bureaucrat.cpp AForm.cpp PresidentialPardonForm.cpp \
+		RobotomyRequestForm.cpp ShrubberyCreationForm.cpp
 OBJS=	$(FILES:.cpp=.o)
 
 all:	$(NAME)
