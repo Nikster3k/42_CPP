@@ -1,7 +1,7 @@
 NAME=	zombie
 FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98
 
-FILES=	Zombie.cpp main.cpp
+FILES=	Zombie.cpp main.cpp zombieHorde.cpp
 OBJS=	$(FILES:.cpp=.o)
 
 all:	$(NAME)

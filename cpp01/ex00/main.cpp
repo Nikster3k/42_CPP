@@ -6,8 +6,8 @@ int main(void)
 
 	patientZero.announce();
 
-	patientZero.randomChump("Peter");
-	Zombie* farAway = patientZero.newZombie("Harald");
+	randomChump("Peter");
+	Zombie* farAway = newZombie("Harald");
 	farAway->announce();
 	delete farAway;
 }
