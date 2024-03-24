@@ -19,11 +19,18 @@ RobotomyRequestForm& RobotomyRequestForm::operator= (const RobotomyRequestForm& 
 }
 
 RobotomyRequestForm::~RobotomyRequestForm() {}
-
 void	RobotomyRequestForm::execute(Bureaucrat const& executor) const
 {
 	checkExecuteRights(executor);
 	std::srand(std::time(NULL));
+
+	std::cout << "BzzzzZzzzZZZZZz..." << std::endl;
+	sleep(1);
+	std::cout << "Brrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr..." << std::endl;
+	sleep(1);
+	std::cout << "BzzzzZzzzZZZZZz..." << std::endl;
+	sleep(1);
+
 	int	random = std::rand();
 	std::cout << _target << " has been " <<
 		(random > RAND_MAX / 2 ? "successfully" : "unsuccessfully")
