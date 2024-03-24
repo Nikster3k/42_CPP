@@ -19,11 +19,11 @@ RobotomyRequestForm& RobotomyRequestForm::operator= (const RobotomyRequestForm& 
 }
 
 RobotomyRequestForm::~RobotomyRequestForm() {}
-#include <cstdlib>
-#include <ctime>
+
 void	RobotomyRequestForm::execute(Bureaucrat const& executor) const
 {
 	checkExecuteRights(executor);
+	std::srand(std::time(NULL));
 	int	random = std::rand();
 	std::cout << _target << " has been " <<
 		(random > RAND_MAX / 2 ? "successfully" : "unsuccessfully")

@@ -20,36 +20,36 @@ ShrubberyCreationForm& ShrubberyCreationForm::operator= (const ShrubberyCreation
 
 ShrubberyCreationForm::~ShrubberyCreationForm() {}
 
-std::string tree[15] = {"baum spitze",
-						"mitte",
-						"mitte",
-						"mitte",
-						"mitte",
-						"mitte",
-						"mitte",
-						"mitte",
-						"mitte",
-						"mitte",
-						"mitte",
-						"mitte",
-						"mitte",
-						"mitte",
-						"baum ende"
-						};
-
 void	ShrubberyCreationForm::execute(Bureaucrat const& executor) const
 {
-	checkExecuteRights(executor);
+	const std::string tree[15] = {"               ,@@@@@@@,",
+						"       ,,,.   ,@@@@@@/@@,  .oo8888o.",
+						"    ,&%%&%&&%,@@@@@/@@@@@@,8888\\88/8o",
+						"   ,%&\\%&&%&&%,@@@\\@@@/@@@88\\88888/88'",
+						"   %&&%&%&/%&&%@@\\@@/ /@@@88888\\88888'",
+						"   %&&%/ %&%%&&@@\\ V /@@' `88\\8 `/88'",
+						"   `&%\\ ` /%&'    |.|        \\ '|8'",
+						"       |o|        | |         | |",
+						"       |.|        | |         | |",
+						"jgs \\/ ._\\//_/__/  ,\\_//__\\/.  \\_//__/_"};
 
-	std::ofstream shrubfile((_target + "_shrubbery").c_str());
+	checkExecuteRights(executor);
+	std::string filename(_target + "_shrubbery");
+	std::ofstream shrubfile(filename.c_str());
 
 	if (!shrubfile.is_open() || !shrubfile.good())
 	{
-		std::cout << "Could not open " << _target + "_shrubbery !" << std::endl;
+		std::cout << "Could not open " << filename << "!" << std::endl;
 		return ;
 	}
-
-	for (size_t i = 0; i < 15; i++)
-		shrubfile << tree[i] << std::endl;
+	std::srand(std::time(NULL));
+	int	amount = std::rand() % 10 + 1;
+	for (int i = 0; i < amount; i++)
+	{	
+		for (size_t i = 0; i < 15; i++)
+			shrubfile << tree[i] << std::endl;
+	}
 	shrubfile.close();
+	std::cout << "Created " << filename << " and "
+		<< amount << " trees!" << std::endl;
 }

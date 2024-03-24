@@ -6,10 +6,27 @@
 
 int	main(void)
 {
-	ShrubberyCreationForm pres("Nikolai");
-	Bureaucrat	president("President", 1);
+	Bureaucrat	president("President", 1); //60
 
-	pres.beSigned(president);
-	pres.execute(president);
+	{
+		RobotomyRequestForm pres("Nikolai");
+
+		president.signForm(pres);
+		president.executeForm(pres);
+	}
+
+	{
+		ShrubberyCreationForm pres("Nikolai");
+
+		president.signForm(pres);
+		president.executeForm(pres);
+	}
+
+	{
+		PresidentialPardonForm pres("Nikolai");
+
+		president.signForm(pres);
+		president.executeForm(pres);
+	}
 
 }
