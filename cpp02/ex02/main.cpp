@@ -32,7 +32,7 @@ int main( void )
 		std::cout << g << std::endl; // Output: 26.25
 
 		Fixed h = c / d;
-		std::cout << h << std::endl; // Output: 4.2
+		std::cout << h << std::endl; // Output: 4.19922
 
 		bool isEqual = (c == d);
 		std::cout << isEqual << std::endl; // Output: 0 (false)

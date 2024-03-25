@@ -25,6 +25,7 @@ Fixed::Fixed( const float number )
 
 Fixed&	Fixed::operator= (const Fixed& obj)
 {
+	std::cout << "Copy assignment operator called" << std::endl;
 	this->fixed = obj.fixed;
 	return *this;
 }
