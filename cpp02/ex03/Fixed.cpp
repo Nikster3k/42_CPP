@@ -2,13 +2,13 @@
 
 Fixed::Fixed( void ) 
 {
-	// std::cout << "Default constructor called" << std::endl;
+	std::cout << "Default constructor called" << std::endl;
 	fixed = 0;
 }
 
 Fixed::Fixed( const Fixed& obj)
 {
-	// std::cout << "Copy constructor called" << std::endl;
+	std::cout << "Copy constructor called" << std::endl;
 	*this = obj;
 }
 
@@ -31,7 +31,7 @@ Fixed&	Fixed::operator= (const Fixed& obj)
 
 Fixed::~Fixed() 
 {
-	//std::cout << "Destructor called" << std::endl;
+	std::cout << "Destructor called" << std::endl;
 }
 
 int	Fixed::getRawBits(void) const
@@ -58,36 +58,28 @@ int		Fixed::toInt( void ) const
 
 std::ostream&	operator<<(std::ostream& os, const Fixed& obj)
 {
-	os << obj.toFloat();\
+	os << obj.toFloat();
 	return (os);
 }
 
 Fixed Fixed::operator+(const Fixed &other) const
 {
-	Fixed	result;
-	result.fixed = fixed + other.fixed;
-	return (result);
+	return (Fixed(this->toFloat() + other.toFloat()));
 }
 
 Fixed Fixed::operator-(const Fixed &other) const
 {
-	Fixed	result;
-	result.fixed = fixed - other.fixed;
-	return (result);
+	return (Fixed(this->toFloat() - other.toFloat()));
 }
 
 Fixed Fixed::operator*(const Fixed &other) const
 {
-	Fixed	result;
-	result.fixed = ((long)fixed * other.fixed) >> frac_bits;
-	return (result);
+	return (Fixed(this->toFloat() * other.toFloat()));
 }
 
 Fixed Fixed::operator/(const Fixed &other) const
 {
-	Fixed	result;
-	result.fixed = ((long)fixed << frac_bits) / other.fixed;
-	return (result);
+	return (Fixed(this->toFloat() / other.toFloat()));
 }
 
 Fixed Fixed::operator++ (int)
@@ -97,7 +89,7 @@ Fixed Fixed::operator++ (int)
 	return (result);
 }
 
-Fixed Fixed::operator++ ()
+Fixed& Fixed::operator++ ()
 {
 	this->fixed++;
 	return (*this);
@@ -110,7 +102,7 @@ Fixed Fixed::operator-- (int)
 	return (result);
 }
 
-Fixed Fixed::operator-- ()
+Fixed& Fixed::operator-- ()
 {
 	this->fixed--;
 	return (*this);

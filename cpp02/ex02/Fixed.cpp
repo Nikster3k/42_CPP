@@ -64,30 +64,22 @@ std::ostream&	operator<<(std::ostream& os, const Fixed& obj)
 
 Fixed Fixed::operator+(const Fixed &other) const
 {
-	Fixed	result;
-	result.fixed = fixed + other.fixed;
-	return (result);
+	return (Fixed(this->toFloat() + other.toFloat()));
 }
 
 Fixed Fixed::operator-(const Fixed &other) const
 {
-	Fixed	result;
-	result.fixed = fixed - other.fixed;
-	return (result);
+	return (Fixed(this->toFloat() - other.toFloat()));
 }
 
 Fixed Fixed::operator*(const Fixed &other) const
 {
-	Fixed	result;
-	result.fixed = ((long)fixed * other.fixed) >> frac_bits;
-	return (result);
+	return (Fixed(this->toFloat() * other.toFloat()));
 }
 
 Fixed Fixed::operator/(const Fixed &other) const
 {
-	Fixed	result;
-	result.fixed = ((long)fixed << frac_bits) / other.fixed;
-	return (result);
+	return (Fixed(this->toFloat() / other.toFloat()));
 }
 
 Fixed Fixed::operator++ (int)
@@ -97,7 +89,7 @@ Fixed Fixed::operator++ (int)
 	return (result);
 }
 
-Fixed Fixed::operator++ ()
+Fixed& Fixed::operator++ ()
 {
 	this->fixed++;
 	return (*this);
@@ -110,7 +102,7 @@ Fixed Fixed::operator-- (int)
 	return (result);
 }
 
-Fixed Fixed::operator-- ()
+Fixed& Fixed::operator-- ()
 {
 	this->fixed--;
 	return (*this);
