@@ -35,7 +35,7 @@ float	Point::crossProduct(const Point& other) const
 
 float	Point::sqrLength(void)
 {
-	return((x * x + y * y).toFloat());
+	return(sqrt((x * x + y * y).toFloat()));
 }
 
 float	Point::dot(const Point& other)

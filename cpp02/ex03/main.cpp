@@ -57,15 +57,15 @@ int main( void )
 
 		// Test case 1: Point inside the triangle
 		Point p1(0, 0);
-		std::cout << (Point::bsp(a, b, c, p1) ? "inside" : "outside") << " the triangle" << std::endl;
+		std::cout << (bsp(a, b, c, p1) ? "inside" : "outside") << " the triangle" << std::endl;
 
 		// Test case 2: Point outside the triangle
 		Point p2(5, 5);
-		std::cout << (Point::bsp(a, b, c, p2) ? "inside" : "outside") << " the triangle" << std::endl;
+		std::cout << (bsp(a, b, c, p2) ? "inside" : "outside") << " the triangle" << std::endl;
 
 		// Test case 3: Point on the edge of the triangle
 		Point p3(3, 1);
-		std::cout << (Point::bsp(a, b, c, p3) ? "inside" : "outside") << " the triangle" << std::endl;
+		std::cout << (bsp(a, b, c, p3) ? "inside" : "outside") << " the triangle" << std::endl;
 	}
 
 	return 0;

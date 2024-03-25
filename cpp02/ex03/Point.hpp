@@ -23,7 +23,8 @@ public:
 	Point	operator+ (const Point& obj) const;
 	Point	operator- (const Point& obj) const;
 
-	static bool bsp( Point const a, Point const b, Point const c, Point const point );
 };
+
+bool bsp( Point const a, Point const b, Point const c, Point const point );
 
 #endif  //!POINT_HPP

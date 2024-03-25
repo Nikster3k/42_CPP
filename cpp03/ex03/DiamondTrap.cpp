@@ -3,6 +3,7 @@
 DiamondTrap::DiamondTrap(std::string a_sName)
 	: ClapTrap(a_sName + "_clap_name"), ScavTrap(a_sName), FragTrap(a_sName)
 {
+	std::cout << "Diamond constructor called!" << std::endl;
 	DiamondTrap::name = a_sName;
 	hit_points = FragTrap::hit_points;
 	energy_points = ScavTrap::energy_points;

@@ -1,7 +1,8 @@
 #include <iostream>
 #include "Fixed.hpp"
 
-int main( void ) {
+int main( void ) 
+{
 	std::cout << "==Given tests==" << std::endl;
 	{
 		Fixed a;
