@@ -7,6 +7,8 @@
 
 class ScavTrap : public virtual ClapTrap
 {
+protected:
+	int	_saved_energy;
 public:
 	ScavTrap( void );
 	ScavTrap( std::string name );

@@ -6,9 +6,16 @@
 
 int main( void ) 
 {
-	DiamondTrap	trap("Gigachad");
+	DiamondTrap	trap("Peter");
 
 	trap.whoAmI();
+
+	// for (size_t i = 0; i < 100; i++)
+	// {
+	// 	std::cout << "[ " << i + 1 << " ] ";
+	// 	trap.attack("Evaluator");
+	// }
+	
 	trap.attack("Evaluator");
 	trap.attack("Enemy1");
 

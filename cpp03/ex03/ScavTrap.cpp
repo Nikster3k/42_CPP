@@ -6,6 +6,7 @@ ScavTrap::ScavTrap() : ClapTrap()
 	hit_points = 100;
 	energy_points = 50;
 	attack_damage = 20;
+	_saved_energy = energy_points;
 }
 
 ScavTrap::ScavTrap(std::string name) : ClapTrap(name) 
@@ -14,6 +15,7 @@ ScavTrap::ScavTrap(std::string name) : ClapTrap(name)
 	hit_points = 100;
 	energy_points = 50;
 	attack_damage = 20;
+	_saved_energy = energy_points;
 }
 
 ScavTrap::ScavTrap(const ScavTrap& obj) : ClapTrap(obj.name)
@@ -22,6 +24,7 @@ ScavTrap::ScavTrap(const ScavTrap& obj) : ClapTrap(obj.name)
 	hit_points = 100;
 	energy_points = 50;
 	attack_damage = 20;
+	_saved_energy = energy_points;
 }
 
 ScavTrap&	ScavTrap::operator= (const ScavTrap& obj)
