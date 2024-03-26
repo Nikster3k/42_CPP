@@ -5,12 +5,13 @@
 #include <string>
 #include <iostream>
 
-class FragTrap : virtual public ClapTrap
+class FragTrap : public virtual ClapTrap
 {
 public:
+	FragTrap( void );
 	FragTrap( std::string name );
-	FragTrap( const FragTrap& obj);
-	FragTrap&	operator= (const FragTrap& obj);
+	FragTrap( const FragTrap& obj );
+	FragTrap&	operator= ( const FragTrap& obj );
 	~FragTrap();
 
 	void	highFivesGuys( void );

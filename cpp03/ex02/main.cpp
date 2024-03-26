@@ -18,6 +18,7 @@ int main( void )
 
 	trap.takeDamage(4);
 	trap.takeDamage(10);
+	trap.takeDamage(10);
 
 	trap.highFivesGuys();
 

@@ -5,9 +5,10 @@
 #include <string>
 #include <iostream>
 
-class FragTrap : public ClapTrap
+class FragTrap : public virtual ClapTrap
 {
 public:
+	FragTrap( void );
 	FragTrap( std::string name );
 	FragTrap( const FragTrap& obj );
 	FragTrap&	operator= ( const FragTrap& obj );

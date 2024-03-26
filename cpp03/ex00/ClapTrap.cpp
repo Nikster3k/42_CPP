@@ -1,5 +1,14 @@
 #include "ClapTrap.hpp"
 
+ClapTrap::ClapTrap()
+{
+	name = "undefined";
+	std::cout << "ClapTrap default Constructor called for " << name << std::endl;
+	hit_points = 10;
+	energy_points = 10;
+	attack_damage = 0;
+}
+
 ClapTrap::ClapTrap(std::string a_sName)
 {
 	std::cout << "ClapTrap Constructor called for " << a_sName << std::endl;
@@ -45,7 +54,7 @@ void ClapTrap::attack(const std::string & a_sTarget)
 
 void ClapTrap::takeDamage(unsigned int amount)
 {
-	hit_points -= amount;
+	hit_points = hit_points - static_cast<int>(amount) < 0 ? 0 : hit_points - amount;
 	std::cout << "ClapTrap " << name << " takes " << amount
 		<< " points of damage! Now at " << hit_points << " hitpoints!" << std::endl;
 }

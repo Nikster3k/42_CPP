@@ -1,8 +1,16 @@
 #include "ScavTrap.hpp"
 
+ScavTrap::ScavTrap() : ClapTrap()
+{
+	std::cout << "ScavTrap default Constructor called for " << name << std::endl;
+	hit_points = 100;
+	energy_points = 50;
+	attack_damage = 20;
+}
+
 ScavTrap::ScavTrap(std::string name) : ClapTrap(name) 
 {
-	std::cout << "ScavTrap Constructor has benn called for " << this->name << std::endl;
+	std::cout << "ScavTrap Constructor called for " << name << std::endl;
 	hit_points = 100;
 	energy_points = 50;
 	attack_damage = 20;
@@ -10,7 +18,7 @@ ScavTrap::ScavTrap(std::string name) : ClapTrap(name)
 
 ScavTrap::ScavTrap(const ScavTrap& obj) : ClapTrap(obj.name)
 {
-	std::cout << "ClapTrap copy Constructor called!" << std::endl;
+	std::cout << "ScavTrap copy Constructor called!" << std::endl;
 	hit_points = 100;
 	energy_points = 50;
 	attack_damage = 20;
@@ -30,7 +38,7 @@ ScavTrap&	ScavTrap::operator= (const ScavTrap& obj)
 
 ScavTrap::~ScavTrap()
 {
-	std::cout << "ScavTrap Destructor has benn called for " << name << std::endl;
+	std::cout << "ScavTrap Destructor called for " << name << std::endl;
 }
 
 void	ScavTrap::attack( const std::string& a_sTarget)

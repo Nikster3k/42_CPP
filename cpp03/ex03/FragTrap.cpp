@@ -1,8 +1,16 @@
 #include "FragTrap.hpp"
 
+FragTrap::FragTrap() : ClapTrap()
+{
+	std::cout << "FragTrap default Constructor has benn called for " << name << std::endl;
+	hit_points = 100;
+	energy_points = 100;
+	attack_damage = 30;
+}
+
 FragTrap::FragTrap(std::string name) : ClapTrap(name) 
 {
-	std::cout << "FragTrap Constructor has benn called for " << this->name << std::endl;
+	std::cout << "FragTrap Constructor has benn called for " << name << std::endl;
 	hit_points = 100;
 	energy_points = 100;
 	attack_damage = 30;
@@ -35,5 +43,5 @@ FragTrap::~FragTrap()
 
 void	FragTrap::highFivesGuys(void)
 {
-	std::cout << "This is a positive high five request from " << name << " FragTrap" << std::endl;
+	std::cout << "This is a positive high five request from FragTrap " << name << std::endl;
 }
