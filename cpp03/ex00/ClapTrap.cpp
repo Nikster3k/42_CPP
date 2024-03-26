@@ -55,7 +55,7 @@ void ClapTrap::attack(const std::string & a_sTarget)
 void ClapTrap::takeDamage(unsigned int amount)
 {
 	hit_points = hit_points - static_cast<int>(amount) < 0 ? 0 : hit_points - amount;
-	std::cout << "ClapTrap " << name << " takes " << amount
+ 	std::cout << "ClapTrap " << name << " takes " << amount
 		<< " points of damage! Now at " << hit_points << " hitpoints!" << std::endl;
 }
 

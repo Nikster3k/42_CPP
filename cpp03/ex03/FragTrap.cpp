@@ -43,5 +43,7 @@ FragTrap::~FragTrap()
 
 void	FragTrap::highFivesGuys(void)
 {
+	if (hit_points <= 0)
+		return ;
 	std::cout << "This is a positive high five request from FragTrap " << name << std::endl;
 }
