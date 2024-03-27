@@ -1,6 +1,6 @@
 #include "Cat.hpp"
 
-Cat::Cat(void) : Animal()
+Cat::Cat(void) : AAnimal()
 {
 	std::cout << "Cat constructor called!" << std::endl;
 	type = "Cat";
@@ -9,12 +9,14 @@ Cat::Cat(void) : Animal()
 
 Cat::Cat(const Cat &other)
 {
+	std::cout << "Cat copy constructor called!" << std::endl;
 	type = other.type;
 	brain = new Brain(*other.brain);
 }
 
 Cat &Cat::operator=(const Cat &other)
 {
+	std::cout << "Cat copy assignment operator called!" << std::endl;
 	if (this != &other)
 	{
 		type = other.type;

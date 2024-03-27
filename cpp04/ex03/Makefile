@@ -2,7 +2,7 @@ NAME=	program
 FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98 -g
 
 FILES=	main.cpp AMateria.cpp Character.cpp Cure.cpp \
-		Ice.cpp MateriaSource.cpp
+		Ice.cpp MateriaSource.cpp Ground.cpp
 OBJS=	$(FILES:.cpp=.o)
 
 all:	$(NAME)

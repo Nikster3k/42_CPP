@@ -8,24 +8,24 @@
 
 int main()
 {
-	const Animal* meta = new Animal();
-	const Animal* j = new Dog();
-	const Animal* i = new Cat();
-	std::cout << j->getType() << " " << std::endl;
+	const AAnimal* meta = new AAnimal();
+	const AAnimal* dog = new Dog();
+	const AAnimal* i = new Cat();
+	std::cout << dog->getType() << " " << std::endl;
 	std::cout << i->getType() << " " << std::endl;
 	i->makeSound(); //will output the cat sound!
-	j->makeSound();
+	dog->makeSound();
 	meta->makeSound();
 
-	Animal* copy = new Animal(*i);
+	AAnimal* copy = new AAnimal(*i);
 
 	std::cout << copy->getType() << " " << std::endl;
-	*copy = *j;
+	*copy = *dog;
 	std::cout << copy->getType() << " " << std::endl;
 
 	delete copy;
 	delete i;
-	delete j;
+	delete dog;
 	delete meta;
 
 	{
@@ -48,6 +48,8 @@ int main()
 
 	delete ibad;
 	delete badmeta;
+
+
 
 	return 0;
 }

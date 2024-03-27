@@ -1,4 +1,4 @@
-#include "Animal.hpp"
+#include "AAnimal.hpp"
 
 AAnimal::AAnimal(void)
 {
@@ -13,7 +13,6 @@ AAnimal::AAnimal(const AAnimal &obj)
 
 AAnimal& AAnimal::operator=(const AAnimal &obj)
 {
-	std::cout << "Animal copy assignment operator called" << std::endl;
 	if (this != &obj)
 	{
 		type = obj.type;

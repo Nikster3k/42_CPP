@@ -27,6 +27,8 @@ int main()
 
 	std::cout << "\n\n=== Required tests ===" << std::endl;
 
+	// AAnimal test;
+
 	AAnimal* animals[100];
 	for (size_t i = 0; i < 50; i++)
 	{

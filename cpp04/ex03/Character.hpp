@@ -1,21 +1,18 @@
 #ifndef CHARACTER_H
 # define CHARACTER_H
 
-# define MAX_DROPPED 50
-
 # include "AMateria.hpp"
 # include "ICharacter.hpp"
 # include <string>
+# include "Ground.hpp"
 
 class Character : public ICharacter
 {
 private:
 	std::string	name;
 	AMateria*	inventory[4];
-	AMateria*	dropped[MAX_DROPPED];
-	size_t		droptop;
-	void		addDropped( AMateria* m );
 public:
+	Character( void );
 	Character( std::string name );
 	Character( const Character& other);
 	Character&	operator= ( const Character& other );

@@ -8,11 +8,13 @@ WrongCat::WrongCat(void) : WrongAnimal()
 
 WrongCat::WrongCat(const WrongCat &other)
 {
+	std::cout << "WrongCat copy constructor called" << std::endl;
 	type = other.type;
 }
 
 WrongCat &WrongCat::operator=(const WrongCat &other)
 {
+	std::cout << "WrongCat copy assignment operator called" << std::endl;
 	if (this != &other)
 		type = other.type;
 	return (*this);

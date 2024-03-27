@@ -1,13 +1,17 @@
 #include "Character.hpp"
 
+Character::Character(void)
+{
+	name = "undefined";
+	for (size_t i = 0; i < 4; i++)
+		inventory[i] = NULL;
+}
+
 Character::Character(std::string name)
 {
 	this->name = name;
 	for (size_t i = 0; i < 4; i++)
 		inventory[i] = NULL;
-	for (size_t i = 0; i < MAX_DROPPED; i++)
-		dropped[i] = NULL;
-	droptop = 0;	
 }
 
 Character::Character(const Character& other)
@@ -19,13 +23,6 @@ Character::Character(const Character& other)
 			inventory[i] = other.inventory[i]->clone();
 		else
 			inventory[i] = NULL;
-	}
-	for (size_t i = 0; i < MAX_DROPPED; i++)
-	{
-		if (i <= other.droptop && other.dropped[i] != NULL)
-			dropped[i] = other.dropped[i]->clone();
-		else
-			dropped[i] = NULL;
 	}
 }
 
@@ -44,16 +41,6 @@ Character&	Character::operator= (const Character& other)
 			else
 				inventory[i] = NULL;
 		}
-		for (size_t i = 0; i < MAX_DROPPED; i++)
-		{
-			if (i <= other.droptop && other.dropped[i] != NULL)
-			{
-				delete dropped[i];
-				dropped[i] = other.dropped[i]->clone();
-			}
-			else
-				dropped[i] = NULL;
-		}
 	}
 	return (*this);
 }
@@ -62,8 +49,6 @@ Character::~Character()
 {
 	for (size_t i = 0; i < 4; i++)
 		delete inventory[i];
-	for (size_t i = 0; i < MAX_DROPPED; i++)
-		delete dropped[i];
 }
 
 std::string const & Character::getName() const
@@ -81,24 +66,14 @@ void	Character::equip(AMateria* m)
 			return ;
 		}
 	}
-}
-
-void	Character::addDropped(AMateria* m)
-{
-	if (m == NULL)
-		return ;
-	if (droptop >= MAX_DROPPED)
-		droptop = 0;
-	if (dropped[droptop] != NULL)
-		delete dropped[droptop];
-	dropped[droptop++] = m;
+	delete m;
 }
 
 void	Character::unequip(int idx)
 {
 	if (idx > 3 || idx < 0 || inventory[idx] == NULL)
 		return ;
-	addDropped(inventory[idx]);
+	Ground::addGround(inventory[idx]);
 	inventory[idx] = NULL;
 }
 

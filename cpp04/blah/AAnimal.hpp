@@ -1,8 +1,8 @@
-#ifndef ANIMAL_HPP
-# define ANIMAL_HPP
+#ifndef AANIMAL_HPP
+# define AANIMAL_HPP
 
-#include <string>
-#include <iostream>
+# include <string>
+# include <iostream>
 
 class AAnimal
 {
@@ -15,8 +15,8 @@ public:
 	virtual ~AAnimal();
 
 	const std::string&	getType( void ) const;
-	virtual void		makeSound( void ) const;
+	virtual void	makeSound( void ) const = 0;
 };
 
 
-#endif //!ANIMAL_HPP
+#endif //!AANIMAL_HPP

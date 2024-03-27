@@ -4,18 +4,18 @@
 # include <string>
 # include <iostream>
 
-class Animal
+class AAnimal
 {
 protected:
 	std::string	type;
 public:
-	Animal(void);
-	Animal( const Animal& obj);
-	Animal&	operator= (const Animal& obj);
-	virtual ~Animal();
+	AAnimal(void);
+	AAnimal( const AAnimal& obj);
+	AAnimal&	operator= (const AAnimal& obj);
+	virtual ~AAnimal();
 
-	std::string	getType( void ) const;
-	virtual void	makeSound( void ) const;
+	const std::string&	getType( void ) const;
+	virtual void		makeSound( void ) const;
 };
 
 

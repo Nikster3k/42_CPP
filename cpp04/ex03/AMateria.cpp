@@ -1,5 +1,7 @@
 #include "AMateria.hpp"
 
+AMateria::AMateria(void) : type("undefined") {}
+
 AMateria::AMateria(std::string const & type) : type(type)
 {
 }

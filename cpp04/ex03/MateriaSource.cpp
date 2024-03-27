@@ -43,14 +43,17 @@ MateriaSource::~MateriaSource()
 
 void	MateriaSource::learnMateria(AMateria* m)
 {
+	if (m == NULL)
+		return ;
 	for (size_t i = 0; i < 4; i++)
 	{
-		if (learned[i] == NULL && m != NULL)
+		if (learned[i] == NULL)
 		{
 			learned[i] = m;
 			return ;
 		}
 	}
+	delete m;
 }
 
 AMateria*	MateriaSource::createMateria(std::string const & type)
@@ -60,6 +63,6 @@ AMateria*	MateriaSource::createMateria(std::string const & type)
 		if (learned[i] != NULL && learned[i]->getType() == type)
 			return (learned[i]->clone());
 	}
-	std::cout << "Material <" << type << "> not learned." << std::endl;
+	std::cout << "Materia <" << type << "> not learned." << std::endl;
 	return (NULL);
 }

@@ -2,17 +2,18 @@
 
 AAnimal::AAnimal(void)
 {
-	std::cout << "Animal constructor called" << std::endl;
+	std::cout << "AAnimal constructor called" << std::endl;
 }
 
 AAnimal::AAnimal(const AAnimal &obj)
 {
-	std::cout << "Animal copy constructor called" << std::endl;
+	std::cout << "AAnimal copy constructor called" << std::endl;
 	type = obj.type;
 }
 
 AAnimal& AAnimal::operator=(const AAnimal &obj)
 {
+	std::cout << "AAnimal copy assignment operator called" << std::endl;
 	if (this != &obj)
 	{
 		type = obj.type;
@@ -22,7 +23,7 @@ AAnimal& AAnimal::operator=(const AAnimal &obj)
 
 AAnimal::~AAnimal()
 {
-	std::cout << "Animal destructor called" << std::endl;
+	std::cout << "AAnimal destructor called" << std::endl;
 }
 
 const std::string&	AAnimal::getType(void) const

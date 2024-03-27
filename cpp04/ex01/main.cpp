@@ -11,14 +11,19 @@ int main()
 
 	std::cout << "=== Given tests ===" << std::endl;
 
-	const Animal* j = new Dog();
-	const Animal* i = new Cat();
+	const AAnimal* j = new Dog();
+	const AAnimal* i = new Cat();
 	delete j;//should not create a leak
 	delete i;
 
-	std::cout << "\n\n=== Required tests ===" << std::endl;
+	std::cout << "\n\n=== Required tests ===\n" << std::endl;
 
-	Animal* animals[100];
+	Dog dog1 = Dog();
+	Dog dog2 = Dog(dog1);
+
+	dog1 = dog2;
+	std::cout << std::endl;
+	AAnimal* animals[100];
 	for (size_t i = 0; i < 50; i++)
 	{
 		std::cout << "[ " << i << " ]: ";
