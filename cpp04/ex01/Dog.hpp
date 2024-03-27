@@ -4,7 +4,7 @@
 # include "Animal.hpp"
 # include "Brain.hpp"
 
-class Dog : public AAnimal 
+class Dog : public Animal 
 {
 private:
 	Brain	*brain;
@@ -15,6 +15,9 @@ public:
 	~Dog();
 
 	void	makeSound( void ) const;
+
+	void	setIdeas( const std::string& idea );
+	void	printBrain( void ) const;
 };
 
 #endif // DOG_HPP

@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 
-class FragTrap : public virtual ClapTrap
+class FragTrap : public ClapTrap
 {
 public:
 	FragTrap( void );

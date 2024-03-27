@@ -6,13 +6,16 @@
 
 class Brain
 {
+private:
+	std::string	ideas[100];
 public:
 	Brain( void );
 	Brain( const Brain& obj);
 	Brain&	operator= (const Brain& obj);
 	~Brain();
 
-	std::string	ideas[100];
+	const std::string&	getIdea( unsigned int idx ) const;
+	void				setIdeas( const std::string& idea );
 };
 
 #endif //!BRAIN_HPP

@@ -1,6 +1,6 @@
 #include "Cat.hpp"
 
-Cat::Cat(void) : AAnimal()
+Cat::Cat(void) : Animal()
 {
 	std::cout << "Cat constructor called!" << std::endl;
 	type = "Cat";
@@ -34,4 +34,16 @@ Cat::~Cat()
 void Cat::makeSound(void) const
 {
 	std::cout << "Cat make miau!" << std::endl;
+}
+
+void	Cat::setIdeas(const std::string& idea)
+{
+	brain->setIdeas(idea);
+}
+
+void	Cat::printBrain(void) const
+{
+	for (size_t i = 0; i < 5; i++)
+		std::cout << brain->getIdea(i) << std::endl;
+	std::cout << "... 95 more ..." << std::endl;
 }

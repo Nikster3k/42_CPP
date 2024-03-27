@@ -15,6 +15,9 @@ public:
 	~Dog();
 
 	void	makeSound( void ) const;
+
+	void	setIdeas( const std::string& idea );
+	void	printBrain( void ) const;
 };
 
 #endif // DOG_HPP

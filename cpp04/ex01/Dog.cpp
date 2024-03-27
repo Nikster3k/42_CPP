@@ -1,6 +1,6 @@
 #include "Dog.hpp"
 
-Dog::Dog(void) : AAnimal()
+Dog::Dog(void) : Animal()
 {
 	std::cout << "Dog constructor called!" << std::endl;
 	type = "Dog";
@@ -34,4 +34,16 @@ Dog::~Dog()
 void Dog::makeSound(void) const
 {
 	std::cout << "Dog make woof!" << std::endl;
+}
+
+void	Dog::setIdeas(const std::string& idea)
+{
+	brain->setIdeas(idea);
+}
+
+void	Dog::printBrain(void) const
+{
+	for (size_t i = 0; i < 5; i++)
+		std::cout << brain->getIdea(i) << std::endl;
+	std::cout << "... 95 more ..." << std::endl;
 }
