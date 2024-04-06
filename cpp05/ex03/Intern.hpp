@@ -10,6 +10,8 @@ class Intern
 {
 public:
 	Intern( void );
+	Intern( const Intern& a_cOther );
+	Intern&	operator= ( const Intern& a_cOther );
 	~Intern();
 
 	AForm*	makeForm( std::string a_sFormName, std::string a_sFormTarget );

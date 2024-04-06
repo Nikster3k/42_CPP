@@ -10,29 +10,31 @@ int	main(void)
 	Bureaucrat	president("President", 1); //60
 
 	{
-		RobotomyRequestForm pres("Nikolai");
+		RobotomyRequestForm form("Nikolai");
 
-		president.signForm(pres);
-		president.executeForm(pres);
+		president.signForm(form);
+		president.executeForm(form);
 	}
 
 	{
-		ShrubberyCreationForm pres("Nikolai");
+		ShrubberyCreationForm form("Nikolai");
 
-		president.signForm(pres);
-		president.executeForm(pres);
+		president.signForm(form);
+		president.executeForm(form);
 	}
 
 	{
-		PresidentialPardonForm pres("Nikolai");
+		PresidentialPardonForm form("Nikolai");
 
-		president.signForm(pres);
-		president.executeForm(pres);
+		president.signForm(form);
+		president.executeForm(form);
 	}
 
 	Intern knecht = Intern();
 	AForm*	tmp;
 
-	tmp = knecht.makeForm("presisdsfdential pardon", "Fheid");
+	tmp = knecht.makeForm("presidential pardon", "Fheid");
+	president.signForm(*tmp);
+	president.executeForm(*tmp);
 	delete tmp;
 }
