@@ -1,7 +1,7 @@
-NAME=	convert
+NAME=	program
 FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98 -g
 
-FILES=	main.cpp ScalarConverter.cpp
+FILES=	main.cpp Base.cpp A.cpp B.cpp C.cpp
 OBJS=	$(FILES:.cpp=.o)
 
 all:	$(NAME)
