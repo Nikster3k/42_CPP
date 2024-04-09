@@ -39,16 +39,14 @@ void	Bureaucrat::increment( void )
 {
 	if (grade - 1 < 1)
 		throw Bureaucrat::GradeTooHighException();
-	else
-		--grade;
+	--grade;
 }
 
 void	Bureaucrat::decrement( void )
 {
 	if (grade + 1 > 150)
 		throw Bureaucrat::GradeTooLowException();
-	else
-		++grade;
+	++grade;
 }
 
 void	Bureaucrat::signForm(AForm& form)
