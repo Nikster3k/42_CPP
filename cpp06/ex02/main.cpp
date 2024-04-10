@@ -17,4 +17,5 @@ int	main(void)
 	basis.identify(*rand);
 
 	delete rand;
+	return (0);
 }

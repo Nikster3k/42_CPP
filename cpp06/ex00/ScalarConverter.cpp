@@ -47,7 +47,8 @@ static void	printDouble(double dval)
 static bool	checkValid(const std::string& a_input)
 {
 	size_t	f_pos;
-	size_t i = 0;
+	size_t	i = 0;
+	size_t	dotcount = 0;
 	if (a_input.length() == 1)
 		return (true);
 	if (a_input.at(0) == '+' || a_input.at(0) == '-')
@@ -57,7 +58,10 @@ static bool	checkValid(const std::string& a_input)
 		return (true);
 	for (; i < a_input.length(); i++)
 	{
-		if (!isdigit(a_input.at(i)) && a_input.at(i) != '.' && a_input.at(i) != 'f')
+		const char& current = a_input.at(i);
+		if (!isdigit(current) && current != '.' && current != 'f')
+			return (false);
+		if ((current == '.' ? dotcount++ : dotcount) > 1)
 			return (false);
 	}
 	if (((f_pos = a_input.find('f')) != a_input.length() - 1 && f_pos != size_t(-1)) || f_pos < 2)
@@ -69,14 +73,18 @@ static bool	checkValid(const std::string& a_input)
 
 void	ScalarConverter::convert(const std::string& a_value)
 {
-	char	*end = NULL;
 	std::cout << std::fixed;
-	double dval = std::strtod(a_value.c_str(), &end);
+	double dval = std::strtod(a_value.c_str(), NULL);
 	float fval = static_cast<float>(dval);
 	int ival = std::atoi(a_value.c_str());
-	long lval = std::strtol(a_value.c_str(), &end, 10);
+	long lval = std::strtol(a_value.c_str(), NULL, 10);
 	if (a_value.length() == 1 && !isdigit(a_value.at(0)))
-		dval = lval = fval = ival = a_value.at(0);
+	{
+		dval = static_cast<double>(a_value.at(0));
+		fval = static_cast<float>(a_value.at(0));
+		ival = static_cast<int>(a_value.at(0));
+		lval = static_cast<long>(a_value.at(0));
+	}
 	if (!checkValid(a_value))
 	{
 		std::cout << "Error" << std::endl;
@@ -85,9 +93,15 @@ void	ScalarConverter::convert(const std::string& a_value)
 	if (a_value.find('.') < a_value.length())
 	{
 		if (a_value.find('f') < a_value.length())
-			ival = dval = fval;
+		{
+			ival = static_cast<int>(fval);
+			dval = static_cast<double>(fval);
+		}
 		else
-			ival = fval = dval;
+		{
+			ival = static_cast<int>(dval);
+			fval = static_cast<float>(dval);
+		}
 	}
 	else if (ival != lval)
 	{

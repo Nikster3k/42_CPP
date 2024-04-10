@@ -14,4 +14,5 @@ int	main(void)
 	Data* b = Serializer::deserialize(re);
 	std::cout << "Compare: old[ " << &a << " ], new[ " << b << " ]" << std::endl;
 	std::cout << "Deserialized:" << std::endl << "Msg: \"" << b->m_msg << "\" Val1: " << b->m_val << std::endl;
+	return (0);
 }
