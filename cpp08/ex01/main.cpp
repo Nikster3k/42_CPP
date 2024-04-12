@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 
-#define MAX_SIZE 10000
+#define MAX_SIZE 10
 
 int main()
 {
@@ -11,15 +11,15 @@ int main()
 	std::srand(std::time(NULL));
 	for (std::size_t i = 0; i < MAX_SIZE - 1; i++)
 	{
-		sp.addNumber(std::rand());
+		sp.addNumber(i);
 	}
-	std::cout << "Start spans" << std::endl;
+	
+	Span cpy(sp);
+	sp.addNumber(-1);
+	cpy.addNumber(444);
 
-	std::cout << sp.shortestSpan() << std::endl;
-	std::cout << sp.shortestSpan() << std::endl;
-	sp.addNumber(5);
-	std::cout << sp.shortestSpan() << std::endl;
-	std::cout << sp.longestSpan() << std::endl;
+	std::cout << "Shortest: " << sp.shortestSpan() << " | " << cpy.shortestSpan() << std::endl;
+	std::cout << "Longest: " << sp.longestSpan() << " | " << cpy.longestSpan() << std::endl;
 
 	return 0;
 }

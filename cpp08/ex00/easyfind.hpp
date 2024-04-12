@@ -6,12 +6,14 @@
 #include <algorithm>
 
 #include <iostream>
+
 template <typename T>
-T&  easyfind(std::vector<T> a_vec, T& a_tofind)
+T&  easyfind(std::vector<T>& a_vec, T a_tofind)
 {
-	std::cout << "Search for: " << a_tofind << std::endl;
-	if (std::binary_search(a_vec.begin(), a_vec.end(), a_tofind))
-		std::cout << "Found element" << std::endl;
+	std::sort(a_vec.begin(), a_vec.end());
+	typename std::vector<T>::iterator found = std::lower_bound(a_vec.begin(), a_vec.end(), a_tofind);
+	if (found != a_vec.end() && *found == a_tofind)
+		return (*found);
 	throw (std::exception());
 }
 

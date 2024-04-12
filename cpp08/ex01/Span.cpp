@@ -22,9 +22,7 @@ Span&	Span::operator= (const Span& other)
 	return (*this);
 }
 
-Span::~Span()
-{
-}
+Span::~Span() {}
 
 void	Span::addNumber(int a_val)
 {
@@ -41,12 +39,12 @@ int	Span::shortestSpan(void)
 	std::sort(m_data.begin(), m_data.end());
 	for (std::size_t i = 0; i < m_data.size() - 1; ++i)
 	{
-		if (m_data[i + 1] - m_data[i] < smallest)
-			smallest = m_data[i + 1] - m_data[i];
+		if (m_data.at(i + 1) - m_data.at(i) < smallest)
+			smallest = m_data.at(i + 1) - m_data.at(i);
 	}
 	return (smallest);
 }
-#include <iostream>
+
 int	Span::longestSpan(void)
 {
 	int	biggest = std::numeric_limits<int>().min();

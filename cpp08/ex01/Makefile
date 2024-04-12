@@ -1,5 +1,5 @@
 NAME=	program
-FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98 -g
+FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98
 
 FILES=	main.cpp Span.cpp
 OBJS=	$(FILES:.cpp=.o)
