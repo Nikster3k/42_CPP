@@ -105,11 +105,6 @@ void	ScalarConverter::convert(const std::string& a_input)
 			fval = static_cast<float>(dval);
 		}
 	}
-	else if (ival != lval)
-	{
-		std::cout << "Not valid" << std::endl;
-		return ;
-	}
 	printChar(dval);
 	printInt(dval, ival);
 	printFloat(fval);
