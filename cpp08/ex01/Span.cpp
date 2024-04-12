@@ -2,28 +2,43 @@
 
 Span::Span(unsigned int N)
 {
-	m_data = new int[N];
+	m_data = std::vector<int>();
 	m_max = N;
-	m_top = 0;
+	m_longSpan = false;
+	m_shortSpan = false;
 }
 
 Span::Span(const Span& other)
 {
-	m_data = new int[other.m_max];
+	m_data = std::vector<int>(other.m_data);
 	m_max = other.m_max;
-	m_top = other.m_top;
+	m_longSpan = other.m_longSpan;
+	m_shortSpan = other.m_shortSpan;
+}
+
+Span&	Span::operator= (const Span& other)
+{
+	if (this != &other)
+	{
+		m_data = std::vector<int>(other.m_data);
+		m_max = other.m_max;
+		m_longSpan = other.m_longSpan;
+		m_shortSpan = other.m_shortSpan;
+	}
+	return (*this);
 }
 
 Span::~Span()
 {
-	delete[] m_data;
 }
 
 void	Span::addNumber(int a_val)
 {
-	if (m_top >= m_max)
+	if (m_data.size() >= m_max)
 		throw (SpanFullException());
-	m_data[m_top++] = a_val;
+	m_shortSpan = m_longSpan = false;
+	m_data.push_back(a_val);
+	// std::sort(m_data.begin(), m_data.end());
 }
 
 static int	getDifference(int lhs, int rhs)
@@ -33,12 +48,14 @@ static int	getDifference(int lhs, int rhs)
 
 int	Span::shortestSpan(void)
 {
-	int	smallest = std::numeric_limits<int>().max();
-	if (m_top < 2)
+	static int	smallest = std::numeric_limits<int>().max();
+	if (m_shortSpan)
+		return (smallest);
+	if (m_data.size() < 2)
 		throw (SpanNotPossible());
-	for (std::size_t i = 0; i < m_top; ++i)
+	for (std::size_t i = 0; i < m_data.size(); ++i)
 	{
-		for (std::size_t n = i + 1; n < m_top; ++n)
+		for (std::size_t n = i + 1; n < m_data.size(); ++n)
 		{
 			if (getDifference(m_data[i], m_data[n]) < smallest)
 			{
@@ -46,17 +63,20 @@ int	Span::shortestSpan(void)
 			}
 		}
 	}
+	m_shortSpan = true;
 	return (smallest);
 }
 
 int	Span::longestSpan(void)
 {
-	int	biggest = std::numeric_limits<int>().min();
-	if (m_top < 2)
+	static int	biggest = std::numeric_limits<int>().min();
+	if (m_longSpan)
+		return (biggest);
+	if (m_data.size() < 2)
 		throw (SpanNotPossible());
-	for (std::size_t i = 0; i < m_top; ++i)
+	for (std::size_t i = 0; i < m_data.size(); ++i)
 	{
-		for (std::size_t n = i + 1; n < m_top; ++n)
+		for (std::size_t n = i + 1; n < m_data.size(); ++n)
 		{
 			if (getDifference(m_data[i], m_data[n]) > biggest)
 			{
@@ -64,6 +84,7 @@ int	Span::longestSpan(void)
 			}
 		}
 	}
+	m_longSpan = true;
 	return (biggest);
 }
 
