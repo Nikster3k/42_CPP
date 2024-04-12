@@ -49,6 +49,8 @@ static bool	checkValid(const std::string& a_input)
 	size_t	f_pos;
 	size_t	i = 0;
 	size_t	dotcount = 0;
+	if (a_input.length() < 1)
+		return (false);
 	if (a_input.length() == 1)
 		return (true);
 	if (a_input.at(0) == '+' || a_input.at(0) == '-')
@@ -71,28 +73,28 @@ static bool	checkValid(const std::string& a_input)
 	return (true);
 }
 
-void	ScalarConverter::convert(const std::string& a_value)
+void	ScalarConverter::convert(const std::string& a_input)
 {
 	std::cout << std::fixed;
-	double dval = std::strtod(a_value.c_str(), NULL);
+	double dval = std::strtod(a_input.c_str(), NULL);
 	float fval = static_cast<float>(dval);
-	int ival = std::atoi(a_value.c_str());
-	long lval = std::strtol(a_value.c_str(), NULL, 10);
-	if (a_value.length() == 1 && !isdigit(a_value.at(0)))
+	int ival = std::atoi(a_input.c_str());
+	long lval = std::strtol(a_input.c_str(), NULL, 10);
+	if (a_input.length() == 1 && !isdigit(a_input.at(0)))
 	{
-		dval = static_cast<double>(a_value.at(0));
-		fval = static_cast<float>(a_value.at(0));
-		ival = static_cast<int>(a_value.at(0));
-		lval = static_cast<long>(a_value.at(0));
+		dval = static_cast<double>(a_input.at(0));
+		fval = static_cast<float>(a_input.at(0));
+		ival = static_cast<int>(a_input.at(0));
+		lval = static_cast<long>(a_input.at(0));
 	}
-	if (!checkValid(a_value))
+	if (!checkValid(a_input))
 	{
 		std::cout << "Error" << std::endl;
 		return ;
 	}
-	if (a_value.find('.') < a_value.length())
+	if (a_input.find('.') < a_input.length())
 	{
-		if (a_value.find('f') < a_value.length())
+		if (a_input.find('f') < a_input.length())
 		{
 			ival = static_cast<int>(fval);
 			dval = static_cast<double>(fval);
