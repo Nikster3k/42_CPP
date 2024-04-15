@@ -11,6 +11,9 @@ class Span
 private:
 	unsigned int		m_max;
 	std::vector<int>	m_data;
+	// long				m_longspan;
+	// long				m_shortspan;
+	// bool				m_change;
 public:
 	Span(unsigned int N);
 	Span(const Span& other);
@@ -18,10 +21,10 @@ public:
 	~Span();
 
 	void	addNumber(int a_val);
-	int		shortestSpan(void);
-	int		longestSpan(void);
+	long	shortestSpan(void);
+	long	longestSpan(void);
 
-	class SpanFullException : public std::exception
+	class SpanFull : public std::exception
 	{
 	public:
 		const char*	what() const throw();

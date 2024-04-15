@@ -1,19 +1,26 @@
 #ifndef EASYFIND_HPP
 # define EASYFIND_HPP
 
-#include <vector>
 #include <exception>
 #include <algorithm>
 
 #include <iostream>
 
 template <typename T>
-T&  easyfind(std::vector<T>& a_vec, T a_tofind)
+int  easyfind(T& container, int tofind)
 {
-	std::sort(a_vec.begin(), a_vec.end());
-	typename std::vector<T>::iterator found = std::lower_bound(a_vec.begin(), a_vec.end(), a_tofind);
-	if (found != a_vec.end() && *found == a_tofind)
-		return (*found);
+	typename T::iterator found = std::find(container.begin(), container.end(), tofind);
+	if (found != container.end())
+		return (found - container.begin());
+	throw (std::exception());
+}
+
+template <typename T>
+int  easyfind(const T& container, int tofind)
+{
+	typename T::const_iterator found = std::find(container.begin(), container.end(), tofind);
+	if (found != container.end())
+		return (found - container.begin());
 	throw (std::exception());
 }
 

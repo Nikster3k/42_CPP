@@ -1,31 +1,14 @@
-//
-// Created by nsassenb on 4/10/24.
-//
 #include "easyfind.hpp"
 #include <iostream>
+#include <vector>
+#include <map>
+#include <ctime>
+#include <cstdlib>
 
-struct Test
+void	vector_const_test(const std::vector<int>& t)
 {
-	std::string	m_owner;
-	int			m_iMone;
-
-	Test(){}
-	Test(int i)
-	{
-		m_owner = "NPC";
-		m_iMone = i;
-	}
-
-	bool operator<(const Test& other) const
-	{
-		return (m_iMone < other.m_iMone);
-	}
-
-	bool operator==(const Test& other) const
-	{
-		return (m_iMone == other.m_iMone);
-	}
-};
+	std::cout << "Found at: " << easyfind(t, 5) << std::endl;
+}
 
 int	main(void)
 {
@@ -44,31 +27,23 @@ int	main(void)
 	try
 	{
 		find = easyfind(wow, 42);
-		std::cout << "Found: " << find << std::endl;
+		std::cout << "Found at: " << find << std::endl;
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
 	}
+	vector_const_test(wow);
 
-	std::vector<Test> struc = std::vector<Test>();
-	for (size_t i = 0; i < 10; i++)
-	{
-		struc.push_back(Test(i));
-	}
-
-	Test	who(2);
 	try
 	{
-		who = easyfind(struc, who);
-		std::cout << who.m_owner << " " << who.m_iMone << std::endl;
+		std::cout << "Found at: " << easyfind(std::string("Hello world!"), 32) << std::endl;
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
 	}
 	
-	
-	
+
 	return (0);
 }
