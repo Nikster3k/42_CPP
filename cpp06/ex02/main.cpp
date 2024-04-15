@@ -12,7 +12,7 @@ int	main(void)
 
 	rand = basis.generate();
 
-	basis.identify((Base*)wow);
+	basis.identify(reinterpret_cast<Base*>(wow));
 	basis.identify(rand);
 	basis.identify(*rand);
 

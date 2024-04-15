@@ -9,12 +9,12 @@ static void	printChar(double val)
 		std::cout << "impossible" << std::endl;
 		return ;
 	}
-	else if (!isprint(c) || c == 32)
+	else if (!isprint(c))
 	{
 		std::cout << "Non displayable" << std::endl;
 		return ;
 	}
-	std::cout << c << std::endl;
+	std::cout << "'" << c << "'" << std::endl;
 }
 
 static void	printInt(double dval, int ival)
@@ -58,12 +58,12 @@ static bool	checkValid(const std::string& a_input)
 	std::string sub = a_input.substr(i);
 	if (sub == "inf" || sub == "inff" || sub == "nan" || sub == "nanf")
 		return (true);
-	for (; i < a_input.length(); i++)
+	for (; i < a_input.length(); ++i)
 	{
 		const char& current = a_input.at(i);
 		if (!isdigit(current) && current != '.' && current != 'f')
 			return (false);
-		if ((current == '.' ? dotcount++ : dotcount) > 1)
+		if ((current == '.' ? ++dotcount : dotcount) > 1)
 			return (false);
 	}
 	if (((f_pos = a_input.find('f')) != a_input.length() - 1 && f_pos != size_t(-1)) || f_pos < 2)
