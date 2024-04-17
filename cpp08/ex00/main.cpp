@@ -1,7 +1,8 @@
 #include "easyfind.hpp"
 #include <iostream>
 #include <vector>
-#include <map>
+#include <deque>
+#include <stack>
 #include <ctime>
 #include <cstdlib>
 
@@ -38,6 +39,22 @@ int	main(void)
 	try
 	{
 		std::cout << "Found at: " << easyfind(std::string("Hello world!"), 32) << std::endl;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	
+	std::stack<int> stk;
+
+	for (size_t i = 0; i < 1000; i++)
+	{
+		stk.push(std::rand());
+	}
+	
+	try
+	{
+		std::cout << "Found at: " << easyfind(stk, 5) << std::endl;
 	}
 	catch(const std::exception& e)
 	{

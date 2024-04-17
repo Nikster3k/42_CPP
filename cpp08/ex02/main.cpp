@@ -39,11 +39,22 @@ int	main(void)
 	mstack.push("lllll7ll77711!11!");
 
 	std::cout.setf(std::cout.left);
+	std::cout << "operator* operator=" << std::endl;
 	for (MutantStack<std::string>::iterator i = mstack.begin(); i != mstack.end(); ++i)
 	{
 		std::cout << std::setw(20) << *i << " | len: " << i->length() << std::endl;
+		*i = "Change!";
 	}
+
+	for (MutantStack<std::string>::iterator it = mstack.begin(); it != mstack.end(); it++)
+	{
+		std::cout << *it << std::endl;
+	}
+
+	std::cout << "operator->" << std::endl;
+	std::cout << mstack.begin()->length() << std::endl;
 	
+	std::cout << std::endl << "Subject main" << std::endl;
 	subjMain();
 	return (0);
 }
