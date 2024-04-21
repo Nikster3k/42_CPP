@@ -4,12 +4,14 @@ Span::Span(unsigned int N)
 {
 	m_data = std::vector<int>();
 	m_max = N;
+	m_data.reserve(m_max);
 }
 
 Span::Span(const Span& other)
 {
 	m_data = std::vector<int>(other.m_data);
 	m_max = other.m_max;
+	m_data.reserve(m_max);
 }
 
 Span&	Span::operator= (const Span& other)
@@ -18,6 +20,7 @@ Span&	Span::operator= (const Span& other)
 	{
 		m_data = std::vector<int>(other.m_data);
 		m_max = other.m_max;
+		m_data.reserve(m_max);
 	}
 	return (*this);
 }
@@ -54,6 +57,13 @@ long	Span::longestSpan(void)
 	// std::cout << m_data.at(m_data.size() - 1) << " " << m_data.at(0) << std::endl;
 	biggest = static_cast<long>(m_data.at(m_data.size() - 1)) - m_data.at(0);
 	return (biggest);
+}
+
+void	Span::fillSpanRand(void)
+{
+	std::srand(std::time(NULL));
+	m_data.resize(m_max);
+	std::generate(m_data.begin(), m_data.end(), std::rand);
 }
 
 const char*	Span::SpanFull::what() const throw()

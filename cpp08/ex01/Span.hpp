@@ -5,6 +5,9 @@
 #include <limits>
 #include <vector>
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
 
 class Span
 {
@@ -23,6 +26,7 @@ public:
 	void	addNumber(int a_val);
 	long	shortestSpan(void);
 	long	longestSpan(void);
+	void	fillSpanRand(void);
 
 	class SpanFull : public std::exception
 	{

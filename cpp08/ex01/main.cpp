@@ -1,30 +1,23 @@
 #include "Span.hpp"
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
 
 #define MAX_SIZE 100000
 
 int main()
 {
 	Span sp = Span(MAX_SIZE);
-	std::srand(std::time(NULL));
 	try
 	{
-		for (std::size_t i = 0; i < MAX_SIZE - 2; i++)
-		{
-			sp.addNumber(std::rand());
-		}
+		sp.fillSpanRand();
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
 	}
 	
-	Span cpy(sp);
+	Span cpy(2);
 	try
 	{
-		sp.addNumber(-1);
 		cpy.addNumber(std::numeric_limits<int>().min());
 		cpy.addNumber(std::numeric_limits<int>().max());
 	}
