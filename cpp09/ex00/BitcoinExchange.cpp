@@ -22,6 +22,12 @@ BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other)
 	return (*this);
 }
 
+// checks if date is in valid format
+// checks if any other chars than string allowed are in the a_str.
+// Checks for hyphen at idx: 4, 7
+// YYYY: any 4 digit number
+// MM: 1-12
+// DD: 1-31
 static	bool	checkValidDate(const std::string& a_str, const std::string& allowed)
 {
 	std::size_t	hyphen_pos = a_str.find('-');
@@ -33,13 +39,13 @@ static	bool	checkValidDate(const std::string& a_str, const std::string& allowed)
 		return (false);
 	}
 	curr_num = std::atoi(a_str.substr(hyphen_pos + 1).c_str());
-	if (curr_num < 0 || curr_num > 12 || (hyphen_pos = a_str.find('-', hyphen_pos + 1)) != 7)
+	if (curr_num < 1 || curr_num > 12 || (hyphen_pos = a_str.find('-', hyphen_pos + 1)) != 7)
 	{
 		std::cerr << "Error: bad input => " << a_str << std::endl;
 		return (false);
 	}
 	curr_num = std::atoi(a_str.substr(hyphen_pos + 1).c_str());
-	if (curr_num < 0 || curr_num > 31)
+	if (curr_num < 1 || curr_num > 31)
 	{
 		std::cerr << "Error: bad input => " << a_str << std::endl;
 		return (false);
@@ -47,6 +53,10 @@ static	bool	checkValidDate(const std::string& a_str, const std::string& allowed)
 	return (true);
 }
 
+//loads Csv into m_exchangeData, also:
+// - checking if date is in correct format
+// - checking for comma seperator
+// - checking for value after comma
 bool	BitcoinExchange::loadCsv(std::string a_fileName)
 {
 	std::ifstream	input;
@@ -90,6 +100,10 @@ bool	BitcoinExchange::loadCsv(std::string a_fileName)
 	return (is_success);
 }
 
+//Return value from input after '|'
+// - checks if pipe is in a_str string
+// - checks if pipe is followed by space and then value
+// - checks if value is in range of 0-1000 and positive
 static float	getMoneyValue(const std::string& a_str)
 {
 	std::size_t	pipepos = a_str.find('|');
@@ -108,6 +122,10 @@ static float	getMoneyValue(const std::string& a_str)
 	return (value);
 }
 
+//prints exchange rate in given format
+// - checks valid date format
+// - checks for correct seperator position and thus preceding space
+// - finds closest date from m_exchangeData and prints in given format
 bool	BitcoinExchange::printExchangeRate(std::string& a_line)
 {
 	if (!checkValidDate(a_line, "0123456789|. -"))
@@ -128,6 +146,7 @@ bool	BitcoinExchange::printExchangeRate(std::string& a_line)
 	return (true);
 }
 
+//loads input file with dates and corresponding values
 void	BitcoinExchange::makeExchange(std::string a_fileName)
 {
 	std::ifstream	input;
