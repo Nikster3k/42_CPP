@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <iterator>
 
 class Span
 {
@@ -27,6 +28,7 @@ public:
 	long	shortestSpan(void);
 	long	longestSpan(void);
 	void	fillSpanRand(void);
+	void	addRange(std::vector<int>::const_iterator a_itBegin, std::vector<int>::const_iterator a_itEnd);
 
 	class SpanFull : public std::exception
 	{

@@ -30,7 +30,7 @@ Span::~Span() {}
 void	Span::addNumber(int a_val)
 {
 	if (m_data.size() >= m_max)
-		throw (SpanFull());
+		throw (Span::SpanFull());
 	m_data.push_back(a_val);
 }
 
@@ -38,7 +38,7 @@ long	Span::shortestSpan(void)
 {
 	long	smallest = std::numeric_limits<int>().max();
 	if (m_data.size() < 2)
-		throw (SpanNotPossible());
+		throw (Span::SpanNotPossible());
 	std::sort(m_data.begin(), m_data.end());
 	for (std::size_t i = 0; i < m_data.size() - 1; ++i)
 	{
@@ -52,19 +52,30 @@ long	Span::longestSpan(void)
 {
 	long	biggest = std::numeric_limits<int>().min();
 	if (m_data.size() < 2)
-		throw (SpanNotPossible());
+		throw (Span::SpanNotPossible());
 	std::sort(m_data.begin(), m_data.end());
-	// std::cout << m_data.at(m_data.size() - 1) << " " << m_data.at(0) << std::endl;
 	biggest = static_cast<long>(m_data.at(m_data.size() - 1)) - m_data.at(0);
 	return (biggest);
 }
 
 void	Span::fillSpanRand(void)
 {
+	std::vector<int>::iterator prev_end = m_data.end();
 	std::srand(std::time(NULL));
 	m_data.resize(m_max);
-	std::generate(m_data.begin(), m_data.end(), std::rand);
+	std::generate(prev_end, m_data.end(), std::rand);
 }
+
+void	Span::addRange(std::vector<int>::const_iterator a_itBegin, std::vector<int>::const_iterator a_itEnd)
+{
+	std::size_t	otherSize = a_itEnd - a_itBegin;
+	if (a_itEnd < a_itBegin)
+		throw (std::exception());
+	if (otherSize + m_data.size() > m_max)
+		throw (Span::SpanFull());
+	m_data.insert(m_data.end(), a_itBegin, a_itEnd);
+}
+
 
 const char*	Span::SpanFull::what() const throw()
 {
