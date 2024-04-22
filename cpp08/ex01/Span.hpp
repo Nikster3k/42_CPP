@@ -15,9 +15,6 @@ class Span
 private:
 	unsigned int		m_max;
 	std::vector<int>	m_data;
-	// long				m_longspan;
-	// long				m_shortspan;
-	// bool				m_change;
 public:
 	Span(unsigned int N);
 	Span(const Span& other);

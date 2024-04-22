@@ -2,13 +2,13 @@
 #include <iostream>
 #include <vector>
 #include <deque>
-#include <stack>
+#include <list>
 #include <ctime>
 #include <cstdlib>
 
 void	vector_const_test(const std::vector<int>& t)
 {
-	std::cout << "Found at: " << easyfind(t, 5) << std::endl;
+	std::cout << "Found: " << *easyfind(t, 5) << std::endl;
 }
 
 int	main(void)
@@ -23,43 +23,51 @@ int	main(void)
 	{
 		std::cout << wow.at(i) << ", ";
 	}
+	std::cout << std::endl;
 	
-	int find;
 	try
 	{
-		find = easyfind(wow, 42);
-		std::cout << "Found at: " << find << std::endl;
+		std::cout << "Found: " << *easyfind(wow, 42) << std::endl;
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
 	}
-	vector_const_test(wow);
 
 	try
 	{
-		std::cout << "Found at: " << easyfind(std::string("Hello world!"), 32) << std::endl;
+		vector_const_test(wow);
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
 	}
 	
-	// std::stack<int> stk;
 
-	// for (size_t i = 0; i < 1000; i++)
-	// {
-	// 	stk.push(std::rand());
-	// }
+	try
+	{
+		std::cout << "Found: " << *easyfind(std::string("Hello world!"), '!') << std::endl;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+
+	std::list<int> lst;
+
+	for (size_t i = 0; i < 1000; i++)
+	{
+		lst.push_back(std::rand());
+	}
 	
-	// try
-	// {
-	// 	std::cout << "Found at: " << easyfind(stk, 5) << std::endl;
-	// }
-	// catch(const std::exception& e)
-	// {
-	// 	std::cerr << e.what() << '\n';
-	// }
+	try
+	{
+		std::cout << "Found: " << *easyfind(lst, 5) << std::endl;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 	
 
 	return (0);
