@@ -38,12 +38,14 @@ static	bool	checkValidDate(const std::string& a_str, const std::string& allowed)
 		std::cerr << "Error: bad input => " << a_str << std::endl;
 		return (false);
 	}
+
 	curr_num = std::atoi(a_str.substr(hyphen_pos + 1).c_str());
 	if (curr_num < 1 || curr_num > 12 || (hyphen_pos = a_str.find('-', hyphen_pos + 1)) != 7)
 	{
 		std::cerr << "Error: bad input => " << a_str << std::endl;
 		return (false);
 	}
+
 	curr_num = std::atoi(a_str.substr(hyphen_pos + 1).c_str());
 	if (curr_num < 1 || curr_num > 31)
 	{
@@ -70,7 +72,8 @@ bool	BitcoinExchange::loadCsv(std::string a_fileName)
 		std::cerr << "File bad" << std::endl;
 		return (false);
 	}
-	std::getline(input, line);
+
+	std::getline(input, line); //removes first line. Change
 	for (int i = 1; std::getline(input, line); ++i)
 	{
 		commapos = line.find(',');
@@ -108,11 +111,13 @@ static float	getMoneyValue(const std::string& a_str)
 {
 	std::size_t	pipepos = a_str.find('|');
 	long		value = 0;
+
 	if (pipepos == std::string::npos || a_str.find_first_of("-+0123456789", pipepos) != 13)
 	{
 		std::cerr << "Error: bad input => " << a_str << std::endl;
 		return (-1);
 	}
+
 	value = std::strtod(a_str.substr(pipepos + 1).c_str(), NULL);
 	if (value > 1000 || value < 0)
 	{
@@ -130,11 +135,13 @@ bool	BitcoinExchange::printExchangeRate(std::string& a_line)
 {
 	if (!checkValidDate(a_line, "0123456789|. -"))
 		return (false);
+
 	if (a_line.find('|') != 11)
 	{
 		std::cerr << "Error: bad input => " << a_line << std::endl;
 		return (false);
 	}
+
 	std::map<std::string, double>::iterator found_it = m_exchangeData.lower_bound(a_line);
 	float money = getMoneyValue(a_line);
 	if (money < 0)
@@ -142,7 +149,6 @@ bool	BitcoinExchange::printExchangeRate(std::string& a_line)
 	if (found_it != m_exchangeData.begin())
 		found_it--;
 	std::cout << found_it->first << " => " << money << " => " << found_it->second * money<< std::endl;
-	// std::cout << a_line.substr(hyphen_pos + 1) << std::endl;
 	return (true);
 }
 
@@ -161,10 +167,6 @@ void	BitcoinExchange::makeExchange(std::string a_fileName)
 	// std::getline(input, line);
 	for (int i = 1; std::getline(input, line); ++i)
 	{
-		// if (pipepos == std::string::npos)
-		// 	std::cerr << "No seperator on line: " << i << ", of file: " << a_fileName << std::endl;
-		// if (pipepos == line.length() - 1 || line.find_first_of("0123456789") == std::string::npos)
-		// 	std::cerr << "No value after date at: " << i << ", of file: " << a_fileName << std::endl;
 		printExchangeRate(line);
 	}
 	input.close();
