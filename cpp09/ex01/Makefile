@@ -1,7 +1,7 @@
 NAME=	program
 FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98
 
-FILES=	main.cpp BitcoinExchange.cpp
+FILES=	main.cpp Span.cpp
 OBJS=	$(FILES:.cpp=.o)
 
 all:	$(NAME)
