@@ -7,7 +7,7 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		std::cerr << "Invalid amount of arguments." << std::endl;
+		std::cerr << "Error: required one argument." << std::endl;
 		return (1);
 	}
 	if (!bx.loadCsv("data.csv"))

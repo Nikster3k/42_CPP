@@ -1,7 +1,7 @@
 NAME=	program
 FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98
 
-FILES=	main.cpp RPN.cpp
+FILES=	main.cpp PmergeMe.cpp
 OBJS=	$(FILES:.cpp=.o)
 
 all:	$(NAME)

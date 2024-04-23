@@ -1,11 +1,4 @@
 #include "BitcoinExchange.hpp"
-#include <cstddef>
-#include <cstdio>
-#include <cstdlib>
-#include <iostream>
-#include <map>
-#include <string>
-#include <utility>
 
 BitcoinExchange::BitcoinExchange(void) : m_exchangeData() {}
 
@@ -69,35 +62,43 @@ bool	BitcoinExchange::loadCsv(std::string a_fileName)
 	input.open(a_fileName.c_str());
 	if (!input.is_open() || !input.good())
 	{
-		std::cerr << "File bad" << std::endl;
+		std::cerr << "Error: could not open file." << std::endl;
 		return (false);
 	}
 
 	std::getline(input, line); //removes first line. Change
-	for (int i = 1; std::getline(input, line); ++i)
+	if (line == "date,exchange_rate")
 	{
-		commapos = line.find(',');
-		if (!checkValidDate(line, "0123456789,.-"))
-			break;
-		if (commapos == std::string::npos)
+		for (int i = 1; std::getline(input, line); ++i)
 		{
-			std::cerr << "No comma on line: " << i << ", of file: " << a_fileName << std::endl;
-			is_success = false;
-			break;
+			commapos = line.find(',');
+			if (!checkValidDate(line, "0123456789,.-"))
+				break;
+			if (commapos == std::string::npos)
+			{
+				std::cerr << "No comma on line: " << i << ", of file: " << a_fileName << std::endl;
+				is_success = false;
+				break;
+			}
+			if (commapos == line.length() - 1)
+			{
+				std::cerr << "No value after date at: " << i << ", of file: " << a_fileName << std::endl;
+				is_success = false;
+				break;
+			}
+			if (line.find_first_not_of("0123456789,.-") != std::string::npos)
+			{
+				std::cerr << "Not allowed character on line: " << i << ", of file: " << a_fileName << std::endl;
+				is_success = false;
+				break;
+			}
+			m_exchangeData[line.substr(0, commapos)] = std::strtod(line.substr(commapos + 1).c_str(), NULL);
 		}
-		if (commapos == line.length() - 1)
-		{
-			std::cerr << "No value after date at: " << i << ", of file: " << a_fileName << std::endl;
-			is_success = false;
-			break;
-		}
-		if (line.find_first_not_of("0123456789,.-") != std::string::npos)
-		{
-			std::cerr << "Not allowed character on line: " << i << ", of file: " << a_fileName << std::endl;
-			is_success = false;
-			break;
-		}
-		m_exchangeData[line.substr(0, commapos)] = std::strtod(line.substr(commapos + 1).c_str(), NULL);
+	}
+	else
+	{
+		std::cerr << "Input wrong format => \"" << line << "\"" << std::endl;
+		is_success = false;
 	}
 	input.close();
 	return (is_success);
@@ -112,7 +113,7 @@ static float	getMoneyValue(const std::string& a_str)
 	std::size_t	pipepos = a_str.find('|');
 	long		value = 0;
 
-	if (pipepos == std::string::npos || a_str.find_first_of("-+0123456789", pipepos) != 13)
+	if (pipepos == std::string::npos || a_str.find_first_of("0123456789", pipepos) != 13)
 	{
 		std::cerr << "Error: bad input => " << a_str << std::endl;
 		return (-1);
@@ -143,12 +144,13 @@ bool	BitcoinExchange::printExchangeRate(std::string& a_line)
 	}
 
 	std::map<std::string, double>::iterator found_it = m_exchangeData.lower_bound(a_line);
-	float money = getMoneyValue(a_line);
-	if (money < 0)
+	float value = getMoneyValue(a_line);
+	if (value < 0)
 		return (false);
 	if (found_it != m_exchangeData.begin())
 		found_it--;
-	std::cout << found_it->first << " => " << money << " => " << found_it->second * money<< std::endl;
+	if (found_it != m_exchangeData.end())
+		std::cout << found_it->first << " => " << value << " => " << found_it->second * value<< std::endl;
 	return (true);
 }
 
@@ -161,13 +163,18 @@ void	BitcoinExchange::makeExchange(std::string a_fileName)
 	input.open(a_fileName.c_str());
 	if (!input.is_open() || !input.good())
 	{
-		std::cerr << "File bad" << std::endl;
+		std::cerr << "Error: could not open file." << std::endl;
 		return ;
 	}
-	// std::getline(input, line);
-	for (int i = 1; std::getline(input, line); ++i)
+	std::getline(input, line);
+	if (line == "date | value")
 	{
-		printExchangeRate(line);
+		for (int i = 1; std::getline(input, line); ++i)
+		{
+			printExchangeRate(line);
+		}
 	}
+	else
+		std::cerr << "Input wrong format => " << line << std::endl;
 	input.close();
 }

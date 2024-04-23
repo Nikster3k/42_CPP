@@ -1,5 +1,5 @@
-NAME=	program
-FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98
+NAME=	btc
+FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98 -g
 
 FILES=	main.cpp BitcoinExchange.cpp
 OBJS=	$(FILES:.cpp=.o)
