@@ -1,4 +1,4 @@
-NAME=	program
+NAME=	RPN
 FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98
 
 FILES=	main.cpp RPN.cpp
