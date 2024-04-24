@@ -1,4 +1,4 @@
-NAME=	program
+NAME=	PmergeMe
 FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98
 
 FILES=	main.cpp PmergeMe.cpp
@@ -19,5 +19,8 @@ fclean: clean
 	rm -f $(NAME)
 
 re:	fclean all
+
+run: $(NAME)
+	./$(NAME) `shuf -i 1-100000 -n 3000 | tr "\n" " "`
 
 .PHONY:	clean fclean re all

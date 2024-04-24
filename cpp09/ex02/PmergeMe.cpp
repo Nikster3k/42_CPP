@@ -3,8 +3,8 @@
 #include <iterator>
 #include <limits>
 #include <stdexcept>
+#include <vector>
 
-#define DEBUG 1
 
 int g_comparisons = 0;
 
@@ -15,9 +15,6 @@ std::vector<int>	strToVector(std::string a_input)
 		throw(std::runtime_error("Error: invalid characters in input."));
 	while (a_input.size() > 0)
 	{
-#if DEBUG
-		std::cout << a_input << std::endl;
-#endif
 		std::size_t num_pos = a_input.find_first_of("0123456789");
 		std::size_t space_pos;
 		long		value;
@@ -34,23 +31,23 @@ std::vector<int>	strToVector(std::string a_input)
 	return (values);
 }
 
-static void	printPairVector(const std::vector<std::pair<int, int> >& a_vec)
-{
-	for (std::size_t i = 0; i < a_vec.size(); ++i) 
-	{
-		std::cout << "(" << a_vec.at(i).first << ", " << a_vec.at(i).second << "), ";
-	}
-	std::cout << std::endl;
-}
+// static void	printPairVector(const std::vector<std::pair<int, int> >& a_vec)
+// {
+// 	for (std::size_t i = 0; i < a_vec.size(); ++i) 
+// 	{
+// 		std::cout << "(" << a_vec.at(i).first << ", " << a_vec.at(i).second << "), ";
+// 	}
+// 	std::cout << std::endl;
+// }
 
-static void	printVector(const std::vector<int>& a_vec)
-{
-	for (std::size_t i = 0; i < a_vec.size(); ++i) 
-	{
-		std::cout << a_vec.at(i) << ", ";
-	}
-	std::cout << std::endl;
-}
+// static void	printVector(const std::vector<int>& a_vec)
+// {
+// 	for (std::size_t i = 0; i < a_vec.size(); ++i) 
+// 	{
+// 		std::cout << a_vec.at(i) << ", ";
+// 	}
+// 	std::cout << std::endl;
+// }
 
 std::vector<std::pair<int, int> >	mergeInsert(std::vector<std::pair<int, int> > a_vec)
 {
@@ -99,6 +96,7 @@ static std::vector<std::pair<int, int> > intVecToPair(std::vector<int> a_vec)
 			pair.second = a_vec.at(i);
 		else
 			pair.second = -1;
+		g_comparisons++;
 		if (pair.first > pair.second)
 			std::swap(pair.first, pair.second);
 		pairs.push_back(pair);
@@ -108,56 +106,87 @@ static std::vector<std::pair<int, int> > intVecToPair(std::vector<int> a_vec)
 
 static int jakobsthalZahl(std::size_t n)
 {
-	if (n == 0)
-		return (0);
-	if (n == 1)
-		return (1);
-	return (2 * jakobsthalZahl(n - 2) + jakobsthalZahl(n - 1));
+	static std::size_t prevN = 0;
+	static std::size_t n2 = 0;
+	static std::size_t n1 = 1;
+	static std::size_t result = 0;
+
+	std::size_t i = 1;
+	while (i < n)
+	{
+		result = 2 * n2 + n1;
+		n1 = n2;
+		n2 = result;
+		i++;
+	}
+	return (result);
 }
 
-static void	binaryInsert(std::vector<int>& a_vec, int val)
+static void	binaryInsert(std::vector<int>& a_vec, int val, int maxIdx)
 {
-	std::size_t start = 0;
-	std::size_t end = a_vec.size();
-	std::size_t	midpoint = end / 2;
+	long	start = 0;
+	long	end = maxIdx;
+	long	midpoint = 0;
 	
-	while (midpoint != start || midpoint != end)
+	while (start <= end)
 	{
 		midpoint = (end - start) / 2 + start;
+		g_comparisons++;
 		if (val <= a_vec.at(midpoint))
-			end = midpoint;
+			end = midpoint - 1;
 		else
-			start = midpoint;
+			start = midpoint + 1;
 	}
+	g_comparisons++;
+	if (val >= a_vec.at(midpoint))
+		midpoint++;
+	// if (midpoint < 0)
+	// 	midpoint = 0;
 	a_vec.insert(a_vec.begin() + midpoint, val);
+}
+
+static void checker(const std::vector<int>& vector)
+{
+	for (size_t i = 1; i < vector.size(); i++) {
+		if (vector.at(i - 1) > vector.at(i))
+		{
+			std::cout << "Bad" << std::endl;
+			return;
+		}
+	}
+	std::cout << "Good" << std::endl;
 }
 
 std::vector<int>	jakobInsert(std::vector<int> main, std::vector<int> pend)
 {
 	std::vector<int> sorted;
 
-	// main.insert(main.begin(), pend.front());
-	// pend.erase(pend.begin());
+	main.insert(main.begin(), pend.front());
 
-	std::cout << "Main: ";
-	printVector(main);
-	std::cout << "Pend: ";
-	printVector(pend);
+	// std::cout << "Main: ";
+	// printVector(main);
+	// std::cout << "Pend: ";
+	// printVector(pend);
 
-	// std::size_t iter = 1;
-	// std::size_t s = 0;
-	// std::size_t i = 0;
-	while (!pend.empty())
+	std::size_t iter = 1;
+	std::size_t s = 0;
+	std::size_t i = 1;
+	std::size_t added = 0;
+	while (s < pend.size())
 	{
-		jakobsthalZahl(1);
-		binaryInsert(main, pend.front());
-		pend.erase(pend.begin());
+		i = 2 * jakobsthalZahl(iter++);
+		for (std::size_t x = i; x > s; --x)
+		{
+			if (x >= pend.size())
+				continue;
+			binaryInsert(main, pend.at(x), x + (added++));
+		}
+		s = i;
 	}
 
-	std::cout << "Main: ";
-	printVector(main);
-	std::cout << "Pend: ";
-	printVector(pend);
+	std::cout << "Main Sorted: ";
+	// printVector(main);
+	checker(main);
 
 	return (sorted);
 }
@@ -166,8 +195,9 @@ void	PmergeMeVector(std::string a_input)
 {
 	std::vector<int>	values = strToVector(a_input);
 	std::vector<std::pair<int, int> > pairs = intVecToPair(values);
+	std::cout << "jaco = " << jakobsthalZahl(5) << std::endl;
 	pairs = mergeInsert(pairs);
-	printPairVector(pairs);
+	// printPairVector(pairs);
 	std::vector<int> main;
 	std::vector<int> pend;
 	for (std::size_t i = 0; i < pairs.size(); ++i)
