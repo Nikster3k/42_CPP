@@ -106,10 +106,9 @@ static std::vector<std::pair<int, int> > intVecToPair(std::vector<int> a_vec)
 
 static int jakobsthalZahl(std::size_t n)
 {
-	static std::size_t prevN = 0;
-	static std::size_t n2 = 0;
-	static std::size_t n1 = 1;
-	static std::size_t result = 0;
+	std::size_t n2 = 0;
+	std::size_t n1 = 1;
+	std::size_t result = 0;
 
 	std::size_t i = 1;
 	while (i < n)
