@@ -139,8 +139,6 @@ static void	binaryInsert(std::vector<int>& a_vec, int val, int maxIdx)
 	g_comparisons++;
 	if (val >= a_vec.at(midpoint))
 		midpoint++;
-	// if (midpoint < 0)
-	// 	midpoint = 0;
 	a_vec.insert(a_vec.begin() + midpoint, val);
 }
 
