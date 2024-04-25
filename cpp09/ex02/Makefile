@@ -1,5 +1,5 @@
 NAME=	PmergeMe
-FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98 -g
+FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98 -O3
 
 FILES=	main.cpp PmergeMe.cpp
 OBJS=	$(FILES:.cpp=.o)
@@ -21,6 +21,6 @@ fclean: clean
 re:	fclean all
 
 run: $(NAME)
-	./$(NAME) `shuf -i 1-100000 -n 3000 | tr "\n" " "`
+	./$(NAME) `shuf -i 1-100000 -n 300 | tr "\n" " "`
 
 .PHONY:	clean fclean re all
