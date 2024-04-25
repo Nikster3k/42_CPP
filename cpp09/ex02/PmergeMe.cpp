@@ -1,12 +1,30 @@
 #include "PmergeMe.hpp"
 #include <cstddef>
 #include <iterator>
+#include <algorithm>
 #include <limits>
 #include <stdexcept>
 #include <vector>
 
-
 int g_comparisons = 0;
+
+bool	Block::operator<(const Block& other) const
+{
+	return (*(this->begin) < *(other.begin));
+}
+
+bool	Block::operator>(const Block& other) const
+{
+	return (*(this->begin) < *(other.begin));
+}
+
+inline void Block::swapValues(const Block& lhs, const Block& rhs)
+{
+	std::size_t iter = lhs.end - lhs.begin;
+
+	for (std::size_t i = 0; i < iter; i++)
+		std::swap(*(lhs.begin + i), *(rhs.begin + i));
+}
 
 std::vector<int>	strToVector(std::string a_input)
 {
