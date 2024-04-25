@@ -76,7 +76,7 @@ static long	binaryInsert(std::vector<Block<> >& a_main, int val, int maxIdx)
 	long	start = 0;
 	long	end = maxIdx;
 	long	midpoint = 0;
-	bool	isLessEqual = true;
+	bool	isLessEqual;
 	
 	while (start <= end)
 	{
@@ -91,50 +91,6 @@ static long	binaryInsert(std::vector<Block<> >& a_main, int val, int maxIdx)
 	if (!isLessEqual)
 		midpoint++;
 	return (midpoint);
-}
-
-void	swapInsert(std::vector<int>& a_input, Block<>& a_block, long a_blockSize, std::size_t a_index)
-{
-	Block<>						to(a_block.begin, a_block.end);
-	Block<>						from(to);
-	std::vector<int>::iterator	insertBegin(a_input.begin() + a_index * a_blockSize);
-
-	if (insertBegin < a_block.begin)
-		a_blockSize = -a_blockSize;
-	do
-	{
-		from += a_blockSize;
-		Block<>::swapValues(from, to);
-		to = from;
-	} while (from.begin != insertBegin);
-}
-
-void	swapInsertion(std::vector<Block<> >& a_main, std::vector<Block<> >& a_pend, std::vector<int>& a_input, std::size_t a_blockSize)
-{
-	std::size_t iter = 1;
-	std::size_t s = 0;
-	std::size_t i = 1;
-	std::size_t added = 0;
-
-	a_main.insert(a_main.begin(), a_pend.front());
-	while (s < a_pend.size())
-	{
-		i = 2 * jakobsthalZahl(iter++);
-		for (std::size_t x = i; x > s; --x)
-		{
-			if (x >= a_pend.size())
-				continue;
-			long index = binaryInsert(a_main, *a_pend.at(x).begin, x + (added++));
-			a_main.insert(a_main.begin() + index, a_pend.at(x));
-		}
-		s = i;
-	}
-	for (std::size_t i = 0; i < a_main.size() - 1; i++)
-	{
-		swapInsert(a_input, a_main.at(i), a_blockSize, i);
-		std::swap(a_main.at(i), a_main.at(i + 1));
-	}
-	
 }
 
 void	insertion(std::vector<Block<> >& a_main, std::vector<Block<> >& a_pend, std::vector<int>& a_input, std::size_t a_blockSize)
@@ -196,7 +152,7 @@ void	mergeInsert(std::vector<int>& a_input, std::size_t a_steps)
 	}
 	if (blockSize == 1 && a_input.size() % 2)
 		pend.push_back(Block<> (a_input.end() - 1, a_input.end()));
-	swapInsertion(main, pend, a_input, blockSize);
+	insertion(main, pend, a_input, blockSize);
 }
 
 static void checker(const std::vector<int>& vector)
@@ -295,7 +251,7 @@ static long	binaryInsertDeque(std::deque<Block<std::deque<int> > >& a_main, int 
 	long	start = 0;
 	long	end = maxIdx;
 	long	midpoint = 0;
-	bool	isLessEqual = false;
+	bool	isLessEqual;
 	
 	while (start <= end)
 	{

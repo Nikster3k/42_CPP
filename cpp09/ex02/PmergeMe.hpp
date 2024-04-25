@@ -23,17 +23,6 @@ struct Block
 
 	bool operator<(const Block& other) const {return (*(this->begin) < *(other.begin));}
 	bool operator>(const Block& other) const {return (*(this->begin) < *(other.begin));}
-
-	Block&	operator+=(long step){
-		this->begin += step;
-		this->end += step;
-		return (*this);
-	}
-	Block&	operator-=(long step){
-		this->begin += step;
-		this->end += step;
-		return (*this);
-	}
 	inline static void	swapValues(const Block& lhs, const Block& rhs)
 	{
 		std::size_t iter = lhs.end - lhs.begin;

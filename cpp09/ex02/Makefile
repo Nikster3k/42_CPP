@@ -1,5 +1,5 @@
 NAME=	PmergeMe
-FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98 -g
+FLAGS=	-Wall -Werror -Wextra -pedantic -std=c++98 -O3
 
 FILES=	main.cpp PmergeMe.cpp
 OBJS=	$(FILES:.cpp=.o)
