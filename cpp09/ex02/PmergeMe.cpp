@@ -8,6 +8,10 @@
 
 int g_comparisons = 0;
 
+Block::Block() : begin(), end() {}
+
+Block::Block(std::vector<int>::iterator a_itBegin, std::vector<int>::iterator a_itEnd) : begin(a_itBegin), end(a_itEnd) {}
+
 bool	Block::operator<(const Block& other) const
 {
 	return (*(this->begin) < *(other.begin));
@@ -67,57 +71,21 @@ std::vector<int>	strToVector(std::string a_input)
 // 	std::cout << std::endl;
 // }
 
-std::vector<std::pair<int, int> >	mergeInsert(std::vector<std::pair<int, int> > a_vec)
+static std::vector<std::pair<Block, Block> > intVecToPair(std::vector<int>& a_vec, std::size_t a_blockSize)
 {
-	if (a_vec.size() == 1)
-		return (a_vec);
-	std::vector<std::pair<int, int> > merged;
-	std::vector<std::pair<int, int> > lhs = mergeInsert(std::vector<std::pair<int, int> >(a_vec.begin(), a_vec.begin() + a_vec.size() / 2));
-	std::vector<std::pair<int, int> > rhs = mergeInsert(std::vector<std::pair<int, int> >(a_vec.begin() + a_vec.size() / 2, a_vec.end()));
-	while (lhs.size() != 0 && rhs.size() != 0)
+	std::vector<std::pair<Block, Block> >	pairs;
+	Block	lhs;
+	Block	rhs;
+	std::size_t iterSize = a_vec.size() / (a_blockSize * 2);
+	for (std::size_t i = 0; i < iterSize; ++i)
 	{
-		if (lhs.front().second <= rhs.front().second)
-		{
-			merged.push_back(lhs.front());
-			lhs.erase(lhs.begin());
-		}
-		else
-		{
-			merged.push_back(rhs.front());
-			rhs.erase(rhs.begin());
-		}
-		g_comparisons++;
-	}
-	while (lhs.size() > 0)
-	{
-		merged.push_back(lhs.front());
-		lhs.erase(lhs.begin());
-	}
-	while (rhs.size() > 0)
-	{
-		merged.push_back(rhs.front());
-		rhs.erase(rhs.begin());
-	}
-	return (merged);
-}
-
-static std::vector<std::pair<int, int> > intVecToPair(std::vector<int> a_vec)
-{
-	std::vector<std::pair<int, int> >	pairs;
-
-	for (std::size_t i = 0; i < a_vec.size(); ++i)
-	{
-		std::pair<int, int> pair;
-		pair.first = a_vec.at(i);
-		++i;
-		if (i < a_vec.size())
-			pair.second = a_vec.at(i);
-		else
-			pair.second = -1;
-		g_comparisons++;
-		if (pair.first > pair.second)
-			std::swap(pair.first, pair.second);
-		pairs.push_back(pair);
+		lhs.begin = a_vec.begin() + i * a_blockSize * 2;
+		lhs.end = lhs.begin + a_blockSize;
+		rhs.begin = lhs.end;
+		rhs.end = rhs.begin + a_blockSize;
+		if (lhs < rhs)
+			Block::swapValues(lhs, rhs);
+		pairs.push_back(std::make_pair(lhs, rhs));
 	}
 	return (pairs);
 }
@@ -139,7 +107,7 @@ static int jakobsthalZahl(std::size_t n)
 	return (result);
 }
 
-static void	binaryInsert(std::vector<int>& a_vec, int val, int maxIdx)
+static long	binaryInsert(std::vector<Block>& a_main, int val, int maxIdx)
 {
 	long	start = 0;
 	long	end = maxIdx;
@@ -149,15 +117,75 @@ static void	binaryInsert(std::vector<int>& a_vec, int val, int maxIdx)
 	{
 		midpoint = (end - start) / 2 + start;
 		g_comparisons++;
-		if (val <= a_vec.at(midpoint))
+		if (val <= *a_main.at(midpoint).begin)
 			end = midpoint - 1;
 		else
 			start = midpoint + 1;
 	}
 	g_comparisons++;
-	if (val >= a_vec.at(midpoint))
+	if (val >= *a_main.at(midpoint).begin)
 		midpoint++;
-	a_vec.insert(a_vec.begin() + midpoint, val);
+	return (midpoint);
+}
+
+void	insertion(std::vector<Block>& a_main, std::vector<Block>& a_pend, std::vector<int>& a_input, std::size_t a_blockSize)
+{
+	std::vector<int> sorted;
+	std::size_t iter = 1;
+	std::size_t s = 0;
+	std::size_t i = 1;
+	std::size_t added = 0;
+
+	a_main.insert(a_main.begin(), a_pend.front());
+
+	while (s < a_pend.size())
+	{
+		i = 2 * jakobsthalZahl(iter++);
+		for (std::size_t x = i; x > s; --x)
+		{
+			if (x >= a_pend.size())
+				continue;
+			long index = binaryInsert(a_main, *a_pend.at(x).begin, x + (added++));
+			a_main.insert(a_main.begin() + index, a_pend.at(x));
+		}
+		s = i;
+	}
+	for (std::size_t i = 0; i < a_main.size(); i++)
+	{
+		sorted.insert(sorted.end(), a_main.at(i).begin, a_main.at(i).end);
+	}
+	sorted.insert(sorted.end(), a_input.begin() + a_blockSize, a_input.end());
+	a_input = sorted;
+}
+
+void	mergeInsert(std::vector<int>& a_input, std::size_t a_steps)
+{
+	std::size_t	blockSize = 1 << a_steps;
+	if (a_input.size() < blockSize * 2)
+		return;
+
+	std::vector<std::pair<Block, Block> >	pairVect = intVecToPair(a_input, blockSize);
+	mergeInsert(a_input, a_steps + 1);
+	
+	std::vector<Block> main;
+	std::vector<Block> pend;
+
+	std::size_t	iter = a_input.size() / (blockSize << 1);
+	if (iter != 1 && iter % 2)
+		iter--;
+	std::size_t i = 0;
+	for (; i < iter; i++)
+	{
+		main.push_back(pairVect.at(i).first);
+		pend.push_back(pairVect.at(i).second);
+	}
+	for (; i < pairVect.size(); i++)
+	{
+		pend.push_back(pairVect.at(i).first);
+		pend.push_back(pairVect.at(i).second);
+	}
+
+	insertion(main, pend, a_input, blockSize);
 }
 
 static void checker(const std::vector<int>& vector)
@@ -172,61 +200,15 @@ static void checker(const std::vector<int>& vector)
 	std::cout << "Good" << std::endl;
 }
 
-std::vector<int>	jakobInsert(std::vector<int> main, std::vector<int> pend)
-{
-	std::vector<int> sorted;
 
-	main.insert(main.begin(), pend.front());
-
-	// std::cout << "Main: ";
-	// printVector(main);
-	// std::cout << "Pend: ";
-	// printVector(pend);
-
-	std::size_t iter = 1;
-	std::size_t s = 0;
-	std::size_t i = 1;
-	std::size_t added = 0;
-	while (s < pend.size())
-	{
-		i = 2 * jakobsthalZahl(iter++);
-		for (std::size_t x = i; x > s; --x)
-		{
-			if (x >= pend.size())
-				continue;
-			binaryInsert(main, pend.at(x), x + (added++));
-		}
-		s = i;
-	}
-
-	std::cout << "Main Sorted: ";
-	// printVector(main);
-	checker(main);
-
-	return (sorted);
-}
 
 void	PmergeMeVector(std::string a_input)
 {
 	std::vector<int>	values = strToVector(a_input);
-	std::vector<std::pair<int, int> > pairs = intVecToPair(values);
-	std::cout << "jaco = " << jakobsthalZahl(5) << std::endl;
-	pairs = mergeInsert(pairs);
-	// printPairVector(pairs);
-	std::vector<int> main;
-	std::vector<int> pend;
-	for (std::size_t i = 0; i < pairs.size(); ++i)
-	{
-		if (pairs.at(i).first == -1)
-		{
-			pend.push_back(pairs.at(i).second);
-		}
-		else
-		{
-			main.push_back(pairs.at(i).second);
-			pend.push_back(pairs.at(i).first);
-		}
-	}
-	jakobInsert(main, pend);
+	
+	mergeInsert(values, 0);
+
+	checker(values);
+
 	std::cout << "Comparisons: " << g_comparisons << std::endl;
 }

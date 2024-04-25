@@ -14,6 +14,9 @@ struct Block
 	std::vector<int>::iterator begin;
 	std::vector<int>::iterator end;
 
+	Block();
+	Block(std::vector<int>::iterator a_itBegin, std::vector<int>::iterator a_itEnd);
+
 	bool operator<(const Block& other) const;
 	bool operator>(const Block& other) const;
 	inline static void	swapValues(const Block& lhs, const Block& rhs);
