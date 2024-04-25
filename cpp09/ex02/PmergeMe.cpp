@@ -1,29 +1,6 @@
 #include "PmergeMe.hpp"
 
-
 int g_comparisons = 0;
-
-Block::Block() : begin(), end() {}
-
-Block::Block(std::vector<int>::iterator a_itBegin, std::vector<int>::iterator a_itEnd) : begin(a_itBegin), end(a_itEnd) {}
-
-bool	Block::operator<(const Block& other) const
-{
-	return (*(this->begin) < *(other.begin));
-}
-
-bool	Block::operator>(const Block& other) const
-{
-	return (*(this->begin) < *(other.begin));
-}
-
-inline void Block::swapValues(const Block& lhs, const Block& rhs)
-{
-	std::size_t iter = lhs.end - lhs.begin;
-
-	for (std::size_t i = 0; i < iter; i++)
-		std::swap(*(lhs.begin + i), *(rhs.begin + i));
-}
 
 std::vector<int>	strToVector(std::string a_input)
 {
@@ -48,15 +25,6 @@ std::vector<int>	strToVector(std::string a_input)
 	return (values);
 }
 
-// static void	printPairVector(const std::vector<std::pair<int, int> >& a_vec)
-// {
-// 	for (std::size_t i = 0; i < a_vec.size(); ++i) 
-// 	{
-// 		std::cout << "(" << a_vec.at(i).first << ", " << a_vec.at(i).second << "), ";
-// 	}
-// 	std::cout << std::endl;
-// }
-
 static void	printVector(const std::vector<int>& a_vec)
 {
 	for (std::size_t i = 0; i < a_vec.size(); ++i) 
@@ -66,11 +34,11 @@ static void	printVector(const std::vector<int>& a_vec)
 	std::cout << std::endl;
 }
 
-static std::vector<std::pair<Block, Block> > intVecToPair(std::vector<int>& a_vec, std::size_t a_blockSize)
+static std::vector<std::pair<Block<>, Block<> > > intVecToPair(std::vector<int>& a_vec, std::size_t a_blockSize)
 {
-	std::vector<std::pair<Block, Block> >	pairs;
-	Block	lhs;
-	Block	rhs;
+	std::vector<std::pair<Block<>, Block<> > >	pairs;
+	Block<>	lhs;
+	Block<>	rhs;
 	std::size_t iterSize = a_vec.size() / (a_blockSize * 2);
 	for (std::size_t i = 0; i < iterSize; ++i)
 	{
@@ -80,7 +48,7 @@ static std::vector<std::pair<Block, Block> > intVecToPair(std::vector<int>& a_ve
 		rhs.end = rhs.begin + a_blockSize;
 		g_comparisons++;
 		if (lhs < rhs)
-			Block::swapValues(lhs, rhs);
+			Block<>::swapValues(lhs, rhs);
 		pairs.push_back(std::make_pair(lhs, rhs));
 	}
 	return (pairs);
@@ -103,7 +71,7 @@ static int jakobsthalZahl(std::size_t n)
 	return (result);
 }
 
-static long	binaryInsert(std::vector<Block>& a_main, int val, int maxIdx)
+static long	binaryInsert(std::vector<Block<> >& a_main, int val, int maxIdx)
 {
 	long	start = 0;
 	long	end = maxIdx;
@@ -125,7 +93,7 @@ static long	binaryInsert(std::vector<Block>& a_main, int val, int maxIdx)
 	return (midpoint);
 }
 
-void	insertion(std::vector<Block>& a_main, std::vector<Block>& a_pend, std::vector<int>& a_input, std::size_t a_blockSize)
+void	insertion(std::vector<Block<> >& a_main, std::vector<Block<> >& a_pend, std::vector<int>& a_input, std::size_t a_blockSize)
 {
 	std::vector<int> sorted;
 	std::size_t iter = 1;
@@ -147,6 +115,7 @@ void	insertion(std::vector<Block>& a_main, std::vector<Block>& a_pend, std::vect
 		}
 		s = i;
 	}
+	sorted.reserve(a_input.size());
 	for (std::size_t i = 0; i < a_main.size(); i++)
 	{
 		sorted.insert(sorted.end(), a_main.at(i).begin, a_main.at(i).end);
@@ -161,11 +130,11 @@ void	mergeInsert(std::vector<int>& a_input, std::size_t a_steps)
 	if (a_input.size() < blockSize * 2)
 		return;
 
-	std::vector<std::pair<Block, Block> >	pairVect = intVecToPair(a_input, blockSize);
+	std::vector<std::pair<Block<> , Block<> > >	pairVect = intVecToPair(a_input, blockSize);
 	mergeInsert(a_input, a_steps + 1);
 	
-	std::vector<Block> main;
-	std::vector<Block> pend;
+	std::vector<Block<> > main;
+	std::vector<Block<> > pend;
 
 	std::size_t	iter = a_input.size() / (blockSize << 1);
 	if (iter != 1 && iter % 2)
@@ -182,7 +151,7 @@ void	mergeInsert(std::vector<int>& a_input, std::size_t a_steps)
 		pend.push_back(pairVect.at(i).second);
 	}
 	if (blockSize == 1 && a_input.size() % 2)
-		pend.push_back(Block(a_input.end() - 1, a_input.end()));
+		pend.push_back(Block<> (a_input.end() - 1, a_input.end()));
 	insertion(main, pend, a_input, blockSize);
 }
 
@@ -204,6 +173,7 @@ void	PmergeMeVector(std::string a_input)
 {
 	std::vector<int>	values = strToVector(a_input);
 	
+	g_comparisons = 0;
 	std::cout << "Before: ";
 	printVector(values);
 	std::clock_t t;

@@ -9,18 +9,27 @@
 #include <string>
 #include <iostream>
 #include <ctime>
+#include <algorithm>
+#include <deque>
 
+template <typename container = std::vector<int> >
 struct Block
 {
-	std::vector<int>::iterator begin;
-	std::vector<int>::iterator end;
+	typename container::iterator begin;
+	typename container::iterator end;
 
-	Block();
-	Block(std::vector<int>::iterator a_itBegin, std::vector<int>::iterator a_itEnd);
+	Block() : begin(), end() {}
+	Block(typename container::iterator a_itBegin, typename container::iterator a_itEnd) : begin(a_itBegin), end(a_itEnd) {}
 
-	bool operator<(const Block& other) const;
-	bool operator>(const Block& other) const;
-	inline static void	swapValues(const Block& lhs, const Block& rhs);
+	bool operator<(const Block& other) const {return (*(this->begin) < *(other.begin));}
+	bool operator>(const Block& other) const {return (*(this->begin) < *(other.begin));}
+	inline static void	swapValues(const Block& lhs, const Block& rhs)
+	{
+		std::size_t iter = lhs.end - lhs.begin;
+
+		for (std::size_t i = 0; i < iter; i++)
+			std::swap(*(lhs.begin + i), *(rhs.begin + i));
+	}
 };
 
 
