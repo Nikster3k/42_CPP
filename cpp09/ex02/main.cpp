@@ -1,9 +1,5 @@
 #include "PmergeMe.hpp"
-#include <ctime>
-#include <exception>
-#include <ctime>
-#include <cstdio>
-#include <cstdlib>
+
 
 int	main(int argc, char **argv)
 {
@@ -20,12 +16,7 @@ int	main(int argc, char **argv)
 	}
 	try 
 	{
-		std::time_t start;
-		std::time_t end;
-		std::time(&start);
 		PmergeMeVector(inputstr);
-		std::time(&end);
-		std::cout << end - start << std::endl;
 	} catch (const std::exception& e) {
 		std::cerr << e.what() << std::endl;
 	}

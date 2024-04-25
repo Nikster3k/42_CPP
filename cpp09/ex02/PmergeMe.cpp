@@ -1,10 +1,5 @@
 #include "PmergeMe.hpp"
-#include <cstddef>
-#include <iterator>
-#include <algorithm>
-#include <limits>
-#include <stdexcept>
-#include <vector>
+
 
 int g_comparisons = 0;
 
@@ -62,14 +57,14 @@ std::vector<int>	strToVector(std::string a_input)
 // 	std::cout << std::endl;
 // }
 
-// static void	printVector(const std::vector<int>& a_vec)
-// {
-// 	for (std::size_t i = 0; i < a_vec.size(); ++i) 
-// 	{
-// 		std::cout << a_vec.at(i) << ", ";
-// 	}
-// 	std::cout << std::endl;
-// }
+static void	printVector(const std::vector<int>& a_vec)
+{
+	for (std::size_t i = 0; i < a_vec.size(); ++i) 
+	{
+		std::cout << a_vec.at(i) << " ";
+	}
+	std::cout << std::endl;
+}
 
 static std::vector<std::pair<Block, Block> > intVecToPair(std::vector<int>& a_vec, std::size_t a_blockSize)
 {
@@ -83,6 +78,7 @@ static std::vector<std::pair<Block, Block> > intVecToPair(std::vector<int>& a_ve
 		lhs.end = lhs.begin + a_blockSize;
 		rhs.begin = lhs.end;
 		rhs.end = rhs.begin + a_blockSize;
+		g_comparisons++;
 		if (lhs < rhs)
 			Block::swapValues(lhs, rhs);
 		pairs.push_back(std::make_pair(lhs, rhs));
@@ -112,18 +108,19 @@ static long	binaryInsert(std::vector<Block>& a_main, int val, int maxIdx)
 	long	start = 0;
 	long	end = maxIdx;
 	long	midpoint = 0;
+	bool	isLessEqual;
 	
 	while (start <= end)
 	{
 		midpoint = (end - start) / 2 + start;
 		g_comparisons++;
-		if (val <= *a_main.at(midpoint).begin)
+		isLessEqual = val <= *a_main.at(midpoint).begin;
+		if (isLessEqual)
 			end = midpoint - 1;
 		else
 			start = midpoint + 1;
 	}
-	g_comparisons++;
-	if (val >= *a_main.at(midpoint).begin)
+	if (!isLessEqual)
 		midpoint++;
 	return (midpoint);
 }
@@ -154,7 +151,7 @@ void	insertion(std::vector<Block>& a_main, std::vector<Block>& a_pend, std::vect
 	{
 		sorted.insert(sorted.end(), a_main.at(i).begin, a_main.at(i).end);
 	}
-	sorted.insert(sorted.end(), a_input.begin() + a_blockSize, a_input.end());
+	sorted.insert(sorted.end(), a_input.begin() + a_main.size() * a_blockSize, a_input.end());
 	a_input = sorted;
 }
 
@@ -184,7 +181,8 @@ void	mergeInsert(std::vector<int>& a_input, std::size_t a_steps)
 		pend.push_back(pairVect.at(i).first);
 		pend.push_back(pairVect.at(i).second);
 	}
-
+	if (blockSize == 1 && a_input.size() % 2)
+		pend.push_back(Block(a_input.end() - 1, a_input.end()));
 	insertion(main, pend, a_input, blockSize);
 }
 
@@ -206,7 +204,17 @@ void	PmergeMeVector(std::string a_input)
 {
 	std::vector<int>	values = strToVector(a_input);
 	
+	std::cout << "Before: ";
+	printVector(values);
+	std::clock_t t;
+	t = std::clock();
 	mergeInsert(values, 0);
+	t = std::clock() - t;
+	std::cout << "After: ";
+	printVector(values);
+	std::cout << std::fixed
+		<< "Time to process a range of " << values.size() << " elements with std::vector : "
+		<< static_cast<float>(t) / CLOCKS_PER_SEC * 1000000 << " us" << std::endl;
 
 	checker(values);
 
