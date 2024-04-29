@@ -34,25 +34,6 @@ static void	printVector(const std::vector<int>& a_vec)
 	std::cout << std::endl;
 }
 
-static std::vector<std::pair<Block<>, Block<> > > intVecToPair(std::vector<int>& a_vec, std::size_t a_blockSize)
-{
-	std::vector<std::pair<Block<>, Block<> > >	pairs;
-	Block<>	lhs;
-	Block<>	rhs;
-	std::size_t iterSize = a_vec.size() / (a_blockSize * 2);
-	for (std::size_t i = 0; i < iterSize; ++i)
-	{
-		lhs.begin = a_vec.begin() + i * a_blockSize * 2;
-		lhs.end = lhs.begin + a_blockSize;
-		rhs.begin = lhs.end;
-		rhs.end = rhs.begin + a_blockSize;
-		g_comparisons++;
-		if (lhs < rhs)
-			Block<>::swapValues(lhs, rhs);
-		pairs.push_back(std::make_pair(lhs, rhs));
-	}
-	return (pairs);
-}
 
 static int jakobsthalZahl(std::size_t n)
 {
@@ -93,50 +74,6 @@ static long	binaryInsert(std::vector<Block<> >& a_main, int val, int maxIdx)
 	return (midpoint);
 }
 
-void	swapInsert(std::vector<int>& a_input, Block<>& a_block, long a_blockSize, std::size_t a_index)
-{
-	Block<>						to(a_block.begin, a_block.end);
-	Block<>						from(to);
-	std::vector<int>::iterator	insertBegin(a_input.begin() + a_index * a_blockSize);
-
-	if (insertBegin < a_block.begin)
-		a_blockSize = -a_blockSize;
-	do
-	{
-		from += a_blockSize;
-		Block<>::swapValues(from, to);
-		to = from;
-	} while (from.begin != insertBegin);
-}
-
-void	swapInsertion(std::vector<Block<> >& a_main, std::vector<Block<> >& a_pend, std::vector<int>& a_input, std::size_t a_blockSize)
-{
-	std::size_t iter = 1;
-	std::size_t s = 0;
-	std::size_t i = 1;
-	std::size_t added = 0;
-
-	a_main.insert(a_main.begin(), a_pend.front());
-	while (s < a_pend.size())
-	{
-		i = 2 * jakobsthalZahl(iter++);
-		for (std::size_t x = i; x > s; --x)
-		{
-			if (x >= a_pend.size())
-				continue;
-			long index = binaryInsert(a_main, *a_pend.at(x).begin, x + (added++));
-			a_main.insert(a_main.begin() + index, a_pend.at(x));
-		}
-		s = i;
-	}
-	for (std::size_t i = 0; i < a_main.size() - 1; i++)
-	{
-		swapInsert(a_input, a_main.at(i), a_blockSize, i);
-		std::swap(a_main.at(i), a_main.at(i + 1));
-	}
-	
-}
-
 void	insertion(std::vector<Block<> >& a_main, std::vector<Block<> >& a_pend, std::vector<int>& a_input, std::size_t a_blockSize)
 {
 	std::vector<int> sorted;
@@ -171,32 +108,33 @@ void	insertion(std::vector<Block<> >& a_main, std::vector<Block<> >& a_pend, std
 void	mergeInsert(std::vector<int>& a_input, std::size_t a_steps)
 {
 	std::size_t	blockSize = 1 << a_steps;
-	if (a_input.size() < blockSize * 2)
+	std::size_t	pairSize = blockSize * 2;
+	if (a_input.size() < pairSize)
 		return;
 
-	std::vector<std::pair<Block<> , Block<> > >	pairVect = intVecToPair(a_input, blockSize);
+	std::size_t iter = a_input.size() / pairSize;
+	for (std::size_t i = 0; i < iter; i++)
+	{
+		++g_comparisons;
+		if (a_input.at(i * pairSize) < a_input.at(i * pairSize + blockSize))
+		{
+			for (std::size_t x = 0; x < blockSize; x++)
+				std::swap(a_input.at(i * pairSize + x), a_input.at(i * pairSize + blockSize + x));		
+		}
+	}
+	
 	mergeInsert(a_input, a_steps + 1);
 	
-	std::vector<Block<> > main;
-	std::vector<Block<> > pend;
+	std::vector<int> main;
+	std::vector<int> pend;
 
-	std::size_t	iter = a_input.size() / (blockSize << 1);
-	if (iter != 1 && iter % 2)
-		iter--;
-	std::size_t i = 0;
-	for (; i < iter; i++)
+	for (std::size_t i = 0; i < iter; i++)
 	{
-		main.push_back(pairVect.at(i).first);
-		pend.push_back(pairVect.at(i).second);
+		main.push_back(a_input.at(i * pairSize));
+		pend.push_back(a_input.at(i * pairSize + blockSize));
 	}
-	for (; i < pairVect.size(); i++)
-	{
-		pend.push_back(pairVect.at(i).first);
-		pend.push_back(pairVect.at(i).second);
-	}
-	if (blockSize == 1 && a_input.size() % 2)
-		pend.push_back(Block<> (a_input.end() - 1, a_input.end()));
-	swapInsertion(main, pend, a_input, blockSize);
+
+	//now do just do jacobs insertion 4head :)
 }
 
 static void checker(const std::vector<int>& vector)
@@ -210,8 +148,6 @@ static void checker(const std::vector<int>& vector)
 	}
 	std::cout << "Good" << std::endl;
 }
-
-
 
 void	PmergeMeVector(std::string a_input)
 {
@@ -231,180 +167,6 @@ void	PmergeMeVector(std::string a_input)
 		<< static_cast<double>(t) / CLOCKS_PER_SEC * 1000000 << " us" << std::endl;
 
 	checker(values);
-
-	std::cout << "Comparisons: " << g_comparisons << std::endl;
-}
-
-
-//////////////////////// DEQUE ///////////////////////////////////
-
-std::deque<int>	strToDeque(std::string a_input)
-{
-	std::deque<int>	values;
-	if (a_input.find_first_not_of("0123456789 ") != std::string::npos)
-		throw(std::runtime_error("Error: invalid characters in input."));
-	while (a_input.size() > 0)
-	{
-		std::size_t num_pos = a_input.find_first_of("0123456789");
-		std::size_t space_pos;
-		long		value;
-		if (num_pos == std::string::npos)
-			break ;
-		space_pos = a_input.find_first_of(" ", num_pos);
-		space_pos = space_pos == std::string::npos ? a_input.length() - 1 : space_pos;
-		value = std::strtol(a_input.substr(num_pos).c_str(), NULL, 10);
-		if (value < 0 && value > std::numeric_limits<int>::max())
-			throw (std::runtime_error("Error: number too big."));
-		values.push_back(value);
-		a_input.erase(0, space_pos);
-	}
-	return (values);
-}
-
-static void	printDeque(const std::deque<int>& a_vec)
-{
-	for (std::size_t i = 0; i < a_vec.size(); ++i) 
-	{
-		std::cout << a_vec.at(i) << " ";
-	}
-	std::cout << std::endl;
-}
-
-static std::deque<std::pair<Block<std::deque<int> >, Block<std::deque<int> > > > intDeqToPair(std::deque<int>& a_vec, std::size_t a_blockSize)
-{
-	std::deque<std::pair<Block<std::deque<int> >, Block<std::deque<int> > > >	pairs;
-	Block<std::deque<int> >	lhs;
-	Block<std::deque<int> >	rhs;
-	std::size_t iterSize = a_vec.size() / (a_blockSize * 2);
-	for (std::size_t i = 0; i < iterSize; ++i)
-	{
-		lhs.begin = a_vec.begin() + i * a_blockSize * 2;
-		lhs.end = lhs.begin + a_blockSize;
-		rhs.begin = lhs.end;
-		rhs.end = rhs.begin + a_blockSize;
-		g_comparisons++;
-		if (lhs < rhs)
-			Block<std::deque<int> >::swapValues(lhs, rhs);
-		pairs.push_back(std::make_pair(lhs, rhs));
-	}
-	return (pairs);
-}
-
-static long	binaryInsertDeque(std::deque<Block<std::deque<int> > >& a_main, int val, int maxIdx)
-{
-	long	start = 0;
-	long	end = maxIdx;
-	long	midpoint = 0;
-	bool	isLessEqual = false;
-	
-	while (start <= end)
-	{
-		midpoint = (end - start) / 2 + start;
-		g_comparisons++;
-		isLessEqual = val <= *a_main.at(midpoint).begin;
-		if (isLessEqual)
-			end = midpoint - 1;
-		else
-			start = midpoint + 1;
-	}
-	if (!isLessEqual)
-		midpoint++;
-	return (midpoint);
-}
-
-void	insertionDeque(std::deque<Block<std::deque<int> > >& a_main, std::deque<Block<std::deque<int> > >& a_pend, std::deque<int>& a_input, std::size_t a_blockSize)
-{
-	std::deque<int> sorted;
-	std::size_t iter = 1;
-	std::size_t s = 0;
-	std::size_t i = 1;
-	std::size_t added = 0;
-
-	a_main.insert(a_main.begin(), a_pend.front());
-
-	while (s < a_pend.size())
-	{
-		i = 2 * jakobsthalZahl(iter++);
-		for (std::size_t x = i; x > s; --x)
-		{
-			if (x >= a_pend.size())
-				continue;
-			long index = binaryInsertDeque(a_main, *a_pend.at(x).begin, x + (added++));
-			a_main.insert(a_main.begin() + index, a_pend.at(x));
-		}
-		s = i;
-	}
-	for (std::size_t i = 0; i < a_main.size(); i++)
-	{
-		sorted.insert(sorted.end(), a_main.at(i).begin, a_main.at(i).end);
-	}
-	sorted.insert(sorted.end(), a_input.begin() + a_main.size() * a_blockSize, a_input.end());
-	a_input = sorted;
-}
-
-void	mergeInsertDeque(std::deque<int>& a_input, std::size_t a_steps)
-{
-	std::size_t	blockSize = 1 << a_steps;
-	if (a_input.size() < blockSize * 2)
-		return;
-
-	std::deque<std::pair<Block<std::deque<int> > , Block<std::deque<int> > > >	pairVect = intDeqToPair(a_input, blockSize);
-	mergeInsertDeque(a_input, a_steps + 1);
-	
-	std::deque<Block<std::deque<int> > > main;
-	std::deque<Block<std::deque<int> > > pend;
-
-	std::size_t	iter = a_input.size() / (blockSize << 1);
-	if (iter != 1 && iter % 2)
-		iter--;
-	std::size_t i = 0;
-	for (; i < iter; i++)
-	{
-		main.push_back(pairVect.at(i).first);
-		pend.push_back(pairVect.at(i).second);
-	}
-	for (; i < pairVect.size(); i++)
-	{
-		pend.push_back(pairVect.at(i).first);
-		pend.push_back(pairVect.at(i).second);
-	}
-	if (blockSize == 1 && a_input.size() % 2)
-		pend.push_back(Block<std::deque<int> > (a_input.end() - 1, a_input.end()));
-	insertionDeque(main, pend, a_input, blockSize);
-}
-
-static void checkerDeque(const std::deque<int>& deque)
-{
-	for (size_t i = 1; i < deque.size(); i++) {
-		if (deque.at(i - 1) > deque.at(i))
-		{
-			std::cout << "Bad" << std::endl;
-			return;
-		}
-	}
-	std::cout << "Good" << std::endl;
-}
-
-
-
-void	PmergeMeDeque(std::string a_input)
-{
-	std::deque<int>	values = strToDeque(a_input);
-	
-	g_comparisons = 0;
-	std::cout << "Before: ";
-	printDeque(values);
-	std::clock_t t;
-	t = std::clock();
-	mergeInsertDeque(values, 0);
-	t = std::clock() - t;
-	std::cout << "After: ";
-	printDeque(values);
-	std::cout << std::fixed
-		<< "Time to process a range of " << values.size() << " elements with std::deque : "
-		<< static_cast<double>(t) / CLOCKS_PER_SEC * 1000000 << " us" << std::endl;
-
-	checkerDeque(values);
 
 	std::cout << "Comparisons: " << g_comparisons << std::endl;
 }
