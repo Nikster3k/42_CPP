@@ -76,7 +76,7 @@ static long	binaryInsert(std::vector<Block<> >& a_main, int val, int maxIdx)
 	long	start = 0;
 	long	end = maxIdx;
 	long	midpoint = 0;
-	bool	isLessEqual;
+	bool	isLessEqual = false;
 	
 	while (start <= end)
 	{
@@ -251,7 +251,7 @@ static long	binaryInsertDeque(std::deque<Block<std::deque<int> > >& a_main, int 
 	long	start = 0;
 	long	end = maxIdx;
 	long	midpoint = 0;
-	bool	isLessEqual;
+	bool	isLessEqual = false;
 	
 	while (start <= end)
 	{
