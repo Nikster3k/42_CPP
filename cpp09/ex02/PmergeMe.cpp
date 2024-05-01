@@ -52,18 +52,18 @@ static int jakobsthalZahl(std::size_t n)
 	return (result);
 }
 
-static long	binaryInsert(std::vector<Block<> >& a_main, int val, int maxIdx)
+static long	binaryInsert(std::vector<int>& a_main, int a_val, int a_maxIdx, std::size_t a_blockSize)
 {
 	long	start = 0;
-	long	end = maxIdx;
+	long	end = a_maxIdx;
 	long	midpoint = 0;
 	bool	isLessEqual = true;
-	
+
 	while (start <= end)
 	{
 		midpoint = (end - start) / 2 + start;
 		g_comparisons++;
-		isLessEqual = val <= *a_main.at(midpoint).begin;
+		isLessEqual = a_val <= a_main.at(midpoint * a_blockSize); //crashes here!!!
 		if (isLessEqual)
 			end = midpoint - 1;
 		else
@@ -74,35 +74,28 @@ static long	binaryInsert(std::vector<Block<> >& a_main, int val, int maxIdx)
 	return (midpoint);
 }
 
-void	insertion(std::vector<Block<> >& a_main, std::vector<Block<> >& a_pend, std::vector<int>& a_input, std::size_t a_blockSize)
+std::vector<int>	insertion(std::vector<int>& a_main, std::vector<int>& a_pend, std::size_t a_blockSize)
 {
-	std::vector<int> sorted;
 	std::size_t iter = 1;
 	std::size_t s = 0;
 	std::size_t i = 1;
-	std::size_t added = 0;
+	std::size_t added = 1;
 
-	a_main.insert(a_main.begin(), a_pend.front());
+	a_main.insert(a_main.begin(), a_pend.begin(), a_pend.begin() + a_blockSize);
 
-	while (s < a_pend.size())
+	while (s < a_pend.size() / a_blockSize)
 	{
 		i = 2 * jakobsthalZahl(iter++);
 		for (std::size_t x = i; x > s; --x)
 		{
-			if (x >= a_pend.size())
+			if (x >= a_pend.size() / a_blockSize)
 				continue;
-			long index = binaryInsert(a_main, *a_pend.at(x).begin, x + (added++));
-			a_main.insert(a_main.begin() + index, a_pend.at(x));
+			long index = binaryInsert(a_main, a_pend.at(x * a_blockSize), x + (added++), a_blockSize) * a_blockSize;
+			a_main.insert(a_main.begin() + index, a_pend.begin() + x * a_blockSize, a_pend.begin() + x * a_blockSize + a_blockSize);
 		}
 		s = i;
 	}
-	sorted.reserve(a_input.size());
-	for (std::size_t i = 0; i < a_main.size(); i++)
-	{
-		sorted.insert(sorted.end(), a_main.at(i).begin, a_main.at(i).end);
-	}
-	sorted.insert(sorted.end(), a_input.begin() + a_main.size() * a_blockSize, a_input.end());
-	a_input = sorted;
+	return (a_main);
 }
 
 void	mergeInsert(std::vector<int>& a_input, std::size_t a_steps)
@@ -127,14 +120,19 @@ void	mergeInsert(std::vector<int>& a_input, std::size_t a_steps)
 	
 	std::vector<int> main;
 	std::vector<int> pend;
-
-	for (std::size_t i = 0; i < iter; i++)
+	std::vector<int> tail;
+	std::size_t i = 0;
+	for (i = 0; i < iter; i++)
 	{
-		main.push_back(a_input.at(i * pairSize));
-		pend.push_back(a_input.at(i * pairSize + blockSize));
+		main.insert(main.end(), a_input.begin() + i * pairSize, a_input.begin() + i * pairSize + blockSize);
+		pend.insert(pend.end(), a_input.begin() + i * pairSize + blockSize, a_input.begin() + i * pairSize + pairSize);
 	}
-
-	//now do just do jacobs insertion 4head :)
+	if (a_input.size() - iter * pairSize == blockSize)
+		pend.insert(pend.end(), a_input.begin() + (i++) * pairSize, a_input.end());
+	else
+		tail.insert(tail.begin(), a_input.begin() + i * pairSize, a_input.end());
+	a_input = insertion(main, pend, blockSize);
+	a_input.insert(a_input.end(), tail.begin(), tail.end());
 }
 
 static void checker(const std::vector<int>& vector)
