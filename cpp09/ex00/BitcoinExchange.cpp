@@ -23,24 +23,26 @@ BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other)
 // DD: 1-31
 static	bool	checkValidDate(const std::string& a_str, const std::string& allowed)
 {
+	static int days_in_months[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 	std::size_t	hyphen_pos = a_str.find('-');
-	int			curr_num = 0;
-			
+	
 	if (a_str.find_first_not_of(allowed) != std::string::npos || hyphen_pos != 4)
 	{
 		std::cerr << "Error: bad input => " << a_str << std::endl;
 		return (false);
 	}
+	// int year = std::atoi(a_str.substr(0, hyphen_pos + 1).c_str());
+	// std::cout << year << std::endl;
 
-	curr_num = std::atoi(a_str.substr(hyphen_pos + 1).c_str());
-	if (curr_num < 1 || curr_num > 12 || (hyphen_pos = a_str.find('-', hyphen_pos + 1)) != 7)
+	int month = std::atoi(a_str.substr(hyphen_pos + 1).c_str());
+	if (month < 1 || month > 12 || (hyphen_pos = a_str.find('-', hyphen_pos + 1)) != 7)
 	{
 		std::cerr << "Error: bad input => " << a_str << std::endl;
 		return (false);
 	}
 
-	curr_num = std::atoi(a_str.substr(hyphen_pos + 1).c_str());
-	if (curr_num < 1 || curr_num > 31)
+	int day = std::atoi(a_str.substr(hyphen_pos + 1).c_str());
+	if (day < 1 || day > days_in_months[month - 1])
 	{
 		std::cerr << "Error: bad input => " << a_str << std::endl;
 		return (false);
@@ -73,7 +75,10 @@ bool	BitcoinExchange::loadCsv(std::string a_fileName)
 		{
 			commapos = line.find(',');
 			if (!checkValidDate(line, "0123456789,.-"))
+			{
+				is_success = false;
 				break;
+			}
 			if (commapos == std::string::npos)
 			{
 				std::cerr << "No comma on line: " << i << ", of file: " << a_fileName << std::endl;
@@ -111,7 +116,7 @@ bool	BitcoinExchange::loadCsv(std::string a_fileName)
 static float	getMoneyValue(const std::string& a_str)
 {
 	std::size_t	pipepos = a_str.find('|');
-	long		value = 0;
+	double		value = 0;
 
 	if (pipepos == std::string::npos || a_str.find_first_of("0123456789", pipepos) != 13)
 	{
@@ -134,20 +139,28 @@ static float	getMoneyValue(const std::string& a_str)
 // - finds closest date from m_exchangeData and prints in given format
 bool	BitcoinExchange::printExchangeRate(std::string& a_line)
 {
+	std::size_t	pipe_pos = -1;
 	if (!checkValidDate(a_line, "0123456789|. -"))
 		return (false);
 
-	if (a_line.find('|') != 11)
+	pipe_pos = a_line.find('|');
+	if (pipe_pos != 11)
 	{
 		std::cerr << "Error: bad input => " << a_line << std::endl;
 		return (false);
 	}
 
-	std::map<std::string, double>::iterator found_it = m_exchangeData.lower_bound(a_line);
+	std::string	date = a_line.substr(0, pipe_pos - 1);
+	std::map<std::string, double>::iterator found_it = m_exchangeData.lower_bound(date);
 	float value = getMoneyValue(a_line);
 	if (value < 0)
 		return (false);
-	if (found_it != m_exchangeData.begin())
+	if (date < m_exchangeData.begin()->first)
+	{
+		std::cerr << "Error: input date is too old => " << a_line << std::endl;
+		return (false);
+	}
+	if (found_it != m_exchangeData.begin() && date != found_it->first)
 		found_it--;
 	if (found_it != m_exchangeData.end())
 		std::cout << found_it->first << " => " << value << " => " << found_it->second * value<< std::endl;

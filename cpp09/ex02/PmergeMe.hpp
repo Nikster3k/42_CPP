@@ -11,6 +11,7 @@
 #include <ctime>
 #include <algorithm>
 #include <deque>
+#include <iomanip>
 
 template <typename container = std::vector<int> >
 struct Block
@@ -32,12 +33,9 @@ struct Block
 	}
 };
 
+typedef Block<std::deque<int> > t_qBlock;
 
-
-std::vector<int>					strToVector(std::string a_input);
-std::vector<std::pair<int, int> >	mergeInsert(std::vector<std::pair<int, int> > a_vec);
 void								PmergeMeVector(std::string a_input);
 void								PmergeMeDeque(std::string a_input);
-std::vector<int>					jakobInsert(std::vector<int> main, std::vector<int> pend);
 
 #endif // !PMERGEME_H

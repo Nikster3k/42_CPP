@@ -11,7 +11,10 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	if (!bx.loadCsv("data.csv"))
+	{
+		std::cout << "Error in database" << std::endl;
 		return (1);
+	}
 	bx.makeExchange(argv[1]);
 
 }
