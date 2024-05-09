@@ -1,8 +1,6 @@
 #ifndef PMERGEME_H
 # define PMERGEME_H
 
-#define COUNT 0
-
 #include <iostream>
 #include <string>
 #include <vector>

@@ -12,6 +12,9 @@ all:	$(NAME)
 $(NAME):	$(OBJS)
 	c++ $(FLAGS) $(OBJS) -o $(NAME)
 
+count:
+	make re FLAGS="$(FLAGS) -D COUNT"
+
 clean:
 	rm -f $(OBJS)
 
@@ -21,6 +24,11 @@ fclean: clean
 re:	fclean all
 
 run: $(NAME)
+ifdef V
+	./$(NAME) `shuf -i 1-100000 -n $(V) | tr "\n" " "`
+else
 	./$(NAME) `shuf -i 1-100000 -n 3000 | tr "\n" " "`
+endif
+
 
 .PHONY:	clean fclean re all

@@ -1,6 +1,6 @@
 #include "PmergeMe.hpp"
 
-#if COUNT
+#ifdef COUNT
 int g_comparisons = 0;
 #endif
 
@@ -62,7 +62,7 @@ static std::vector<std::pair<Block<>, Block<> > > intVecToPair(std::vector<int>&
 		lhs.end = lhs.begin + a_blockSize;
 		rhs.begin = lhs.end;
 		rhs.end = rhs.begin + a_blockSize;
-#if COUNT
+#ifdef COUNT
 		g_comparisons++;
 #endif
 		if (lhs < rhs)
@@ -96,7 +96,7 @@ size_t	binarySearch(std::vector<Block<> >& a_main, int val, std::size_t maxIdx)
 		mid = (low + maxIdx) / 2;
 		if (mid >= a_main.size())
 			return (low);
-#if COUNT
+#ifdef COUNT
 		g_comparisons++;
 #endif
 		isLessOrEqual = val <= *(a_main.at(mid).begin);
@@ -190,7 +190,7 @@ void	PmergeMeVector(std::string a_input)
 {
 	std::vector<int>	values = strToVector(a_input);
 
-#if COUNT
+#ifdef COUNT
 	g_comparisons = 0;
 #endif
 	std::cout << std::setw(10) << std::left << "Before: ";
@@ -204,7 +204,7 @@ void	PmergeMeVector(std::string a_input)
 	std::cout << std::fixed
 		<< "Time to process a range of " << values.size() << " elements with std::vector : "
 		<< t / static_cast<double>(CLOCKS_PER_SEC) * 1000000 << " us" << std::endl;
-#if COUNT
+#ifdef COUNT
 	checker(values);
 	std::cout << "Comparisons: " << g_comparisons << std::endl;
 #endif
@@ -249,7 +249,7 @@ static std::deque<std::pair<t_qBlock, t_qBlock> > intDeqToPair(std::deque<int>& 
 		lhs.end = lhs.begin + a_blockSize;
 		rhs.begin = lhs.end;
 		rhs.end = rhs.begin + a_blockSize;
-#if COUNT
+#ifdef COUNT
 		g_comparisons++;
 #endif
 		if (lhs < rhs)
@@ -278,7 +278,7 @@ static size_t	binarySearchDeque(std::deque<t_qBlock>& a_main, int val, std::size
 		mid = (low + maxIdx) / 2;
 		if (mid >= a_main.size())
 			return (low);
-#if COUNT
+#ifdef COUNT
 		g_comparisons++;
 #endif
 		isLessOrEqual = val <= *(a_main.at(mid).begin);
