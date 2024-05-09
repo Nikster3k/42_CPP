@@ -75,9 +75,10 @@ void	RPN::addValue(char a_char)
 			m_calcs.pop();
 			long b = m_calcs.top();
 			m_calcs.pop();
+			if (a == 0)
+				throw(std::runtime_error("Error: division by 0 not possible"));
 			m_calcs.push(checkOverflow(b / a));
 		}
-		// std::cout << m_calcs.top() << std::endl;
 	}
 }
 
