@@ -92,9 +92,9 @@ bool	BitcoinExchange::checkValidDatabase(const std::string& a_line, int a_lineId
  * @param a_clamp if number over 1000 is an error, default false
  * @return converted value to double, or -1 on error
  */
-static double	getValue(const std::string& a_str, const std::size_t a_seperator_pos, bool a_clamp = false)
+static float	getValue(const std::string& a_str, const std::size_t a_seperator_pos, bool a_clamp = false)
 {
-	double		value = 0;
+	float	value = 0;
 	std::size_t	dot_pos;
 
 	if (a_seperator_pos == std::string::npos || (dot_pos = a_str.find('.', a_seperator_pos)) != a_str.find_last_of('.') 
@@ -141,7 +141,7 @@ bool	BitcoinExchange::loadCsv(std::string a_fileName)
 				break;
 			}
 			std::size_t commapos = line.find(',');
-			double value = getValue(line, commapos + 1);
+			float value = getValue(line, commapos + 1);
 			if (value == -1)
 			{
 				std::cerr << "Error in value on line: " << i << ", of file: " << a_fileName << std::endl;
@@ -184,7 +184,7 @@ bool	BitcoinExchange::printExchangeRate(std::string& a_line)
 
 	std::string	date = a_line.substr(0, pipe_pos - 1);
 	std::map<std::string, double>::iterator found_it = m_exchangeData.lower_bound(date);
-	double value = getValue(a_line, pipe_pos + 2, true);
+	float value = getValue(a_line, pipe_pos + 2, true);
 	if (value < 0)
 		return (false);
 	if (date < m_exchangeData.begin()->first)
