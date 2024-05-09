@@ -81,7 +81,7 @@ void	RPN::addValue(char a_char)
 	}
 }
 
-int	RPN::checkOverflow(long a_val)
+int	RPN::checkOverflow(long a_val) const
 {
 	if (a_val > std::numeric_limits<int>::max())
 		throw(std::runtime_error("Error: calculation overflows"));

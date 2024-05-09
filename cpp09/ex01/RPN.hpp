@@ -11,7 +11,7 @@ class RPN
 private:
 	std::stack<int>	m_calcs;
 	void	addValue(char a_char);
-	int		checkOverflow(long a_val);
+	int		checkOverflow(long a_val) const;
 public:
 	RPN(void);
 	RPN(const RPN& other);
