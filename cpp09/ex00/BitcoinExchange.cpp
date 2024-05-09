@@ -98,8 +98,6 @@ static float	getValue(const std::string& a_str, const std::size_t a_seperator_po
 	std::size_t	dot_pos = a_str.find('.', a_seperator_pos);
 	std::size_t	num_pos = num_pos = a_str.find_first_of("0123456789", a_seperator_pos);
 
-	if (a_str == "2024-03-31 | 0.")
-		std::cout << "Dot: " << dot_pos << "len " << a_str.length() - 1 << std::endl;
 	if (a_seperator_pos == std::string::npos
 		|| dot_pos != a_str.find_last_of('.')														//check for only one dot
 		|| (dot_pos != std::string::npos && (dot_pos < num_pos || dot_pos == a_str.length() - 1))	//check for ".", ".0", "0."
