@@ -47,21 +47,22 @@ static void printSubject(const Container& a_cont)
 	std::cout << std::endl;
 }
 
-static std::vector<std::pair<Block<>, Block<> > > intVecToPair(std::vector<int>& a_vec, std::size_t a_blockSize)
+template <template <typename, typename> class Container, typename Alloc>
+static Container<std::pair<Block<Container<int, Alloc> >, Block<Container<int, Alloc> > >, Alloc> intVecToPair(Container<int, Alloc>& a_cont, std::size_t a_blockSize)
 {
-	std::vector<std::pair<Block<>, Block<> > >	pairs;
-	Block<>	lhs;
-	Block<>	rhs;
-	std::size_t iterSize = a_vec.size() / (a_blockSize * 2);
+	Container<std::pair<Block<Container<int, Alloc> >, Block<Container<int, Alloc> > >, Alloc>	pairs;
+	Block<Container<int, Alloc> >	lhs;
+	Block<Container<int, Alloc> >	rhs;
+	std::size_t iterSize = a_cont.size() / (a_blockSize * 2);
 	for (std::size_t i = 0; i < iterSize; ++i)
 	{
-		lhs.begin = a_vec.begin() + i * a_blockSize * 2;
+		lhs.begin = a_cont.begin() + i * a_blockSize * 2;
 		lhs.end = lhs.begin + a_blockSize;
 		rhs.begin = lhs.end;
 		rhs.end = rhs.begin + a_blockSize;
 		g_comparisons++;
 		if (lhs < rhs)
-			Block<>::swapValues(lhs, rhs);
+			Block<Container<int, Alloc> >::swapValues(lhs, rhs);
 		pairs.push_back(std::make_pair(lhs, rhs));
 	}
 	return (pairs);
@@ -84,7 +85,8 @@ static int jakobsthalZahl(std::size_t n)
 	return (result);
 }
 
-static long	binaryInsert(std::vector<Block<> >& a_main, int val, int maxIdx)
+template <template <typename, typename> class Container, typename Alloc>
+static long	binaryInsert(Container<Block<Container<int, Alloc> >, Alloc>& a_main, int val, int maxIdx)
 {
 	long	start = 0;
 	long	end = maxIdx;
@@ -108,9 +110,10 @@ static long	binaryInsert(std::vector<Block<> >& a_main, int val, int maxIdx)
 	return (midpoint);
 }
 
-static void	insertion(std::vector<Block<> >& a_main, std::vector<Block<> >& a_pend, std::vector<int>& a_input, std::size_t a_blockSize)
+template <template <typename, typename> class Container, typename Alloc>
+static void	insertion(Container<Block<Container<int, Alloc> >, Alloc>& a_main, Container<Block<Container<int, Alloc> >, Alloc>& a_pend, Container<int, Alloc>& a_input, std::size_t a_blockSize)
 {
-	std::vector<int> sorted;
+	Container<int, Alloc> sorted;
 	std::size_t iter = 1;
 	std::size_t s = 0;
 	std::size_t i = 1;
@@ -139,17 +142,49 @@ static void	insertion(std::vector<Block<> >& a_main, std::vector<Block<> >& a_pe
 	a_input = sorted;
 }
 
-static void	mergeInsert(std::vector<int>& a_input, std::size_t a_steps)
+// static void	mergeInsert(std::vector<int>& a_input, std::size_t a_steps)
+// {
+// 	std::size_t	blockSize = 1 << a_steps;
+// 	if (a_input.size() < blockSize * 2)
+// 		return;
+
+// 	std::vector<std::pair<Block<> , Block<> > >	pairVect = intVecToPair(a_input, blockSize);
+// 	mergeInsert(a_input, a_steps + 1);
+	
+// 	std::vector<Block<> > main;
+// 	std::vector<Block<> > pend;
+
+// 	std::size_t	iter = a_input.size() / (blockSize << 1);
+// 	if (iter != 1 && iter % 2)
+// 		iter--;
+// 	std::size_t i = 0;
+// 	for (; i < iter; i++)
+// 	{
+// 		main.push_back(pairVect.at(i).first);
+// 		pend.push_back(pairVect.at(i).second);
+// 	}
+// 	for (; i < pairVect.size(); i++)
+// 	{
+// 		pend.push_back(pairVect.at(i).first);
+// 		pend.push_back(pairVect.at(i).second);
+// 	}
+// 	if (blockSize == 1 && a_input.size() % 2)
+// 		pend.push_back(Block<> (a_input.end() - 1, a_input.end()));
+// 	insertion(main, pend, a_input, blockSize);
+// }
+
+template <template <typename, typename> class Container, typename Alloc>
+static void	mergeInsert(Container<int, Alloc>& a_input, std::size_t a_steps)
 {
 	std::size_t	blockSize = 1 << a_steps;
 	if (a_input.size() < blockSize * 2)
 		return;
 
-	std::vector<std::pair<Block<> , Block<> > >	pairVect = intVecToPair(a_input, blockSize);
+	Container<std::pair<Block<Container<int, Alloc> > , Block<Container<int, Alloc> > >, Alloc>	pairVect = intVecToPair(a_input, blockSize);
 	mergeInsert(a_input, a_steps + 1);
 	
-	std::vector<Block<> > main;
-	std::vector<Block<> > pend;
+	Container<Block<Container<int, Alloc> >, Alloc> main;
+	Container<Block<Container<int, Alloc> >, Alloc> pend;
 
 	std::size_t	iter = a_input.size() / (blockSize << 1);
 	if (iter != 1 && iter % 2)
@@ -166,7 +201,7 @@ static void	mergeInsert(std::vector<int>& a_input, std::size_t a_steps)
 		pend.push_back(pairVect.at(i).second);
 	}
 	if (blockSize == 1 && a_input.size() % 2)
-		pend.push_back(Block<> (a_input.end() - 1, a_input.end()));
+		pend.push_back(Block<Container<int, Alloc> >(a_input.end() - 1, a_input.end()));
 	insertion(main, pend, a_input, blockSize);
 }
 
@@ -192,7 +227,7 @@ void	PmergeMeVector(std::string a_input)
 	printSubject(values);
 	std::clock_t t;
 	t = std::clock();
-	mergeInsert(values, 0);
+	mergeInsert<std::vector>(values, 0);
 	t = std::clock() - t;
 	std::cout << std::setw(10) << std::left << "After: ";
 	printSubject(values);

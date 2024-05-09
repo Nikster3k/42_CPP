@@ -13,6 +13,7 @@ class BitcoinExchange
 private:
 	std::map<std::string, double>	m_exchangeData;
 	bool	printExchangeRate(std::string& a_input);
+	bool	checkValidDatabase(const std::string& a_line, int a_lineIdx, const std::string& a_fileName) const;
 public:
 	BitcoinExchange(void);
 	BitcoinExchange(const BitcoinExchange& other);

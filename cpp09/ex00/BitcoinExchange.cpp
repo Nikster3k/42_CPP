@@ -32,7 +32,8 @@ static	bool	checkValidDate(const std::string& a_str, const std::string& allowed)
 		return (false);
 	}
 	// int year = std::atoi(a_str.substr(0, hyphen_pos + 1).c_str());
-	// std::cout << year << std::endl;
+	// if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)
+	// 	std::cout << "schaltjahr\n";
 
 	int month = std::atoi(a_str.substr(hyphen_pos + 1).c_str());
 	if (month < 1 || month > 12 || (hyphen_pos = a_str.find('-', hyphen_pos + 1)) != 7)
@@ -50,6 +51,68 @@ static	bool	checkValidDate(const std::string& a_str, const std::string& allowed)
 	return (true);
 }
 
+bool	BitcoinExchange::checkValidDatabase(const std::string& a_line, int a_lineIdx, const std::string& a_fileName) const
+{
+	std::size_t		commapos;
+	commapos = a_line.find(',');
+	if (commapos == std::string::npos)
+	{
+		std::cerr << "No comma on line: " << a_lineIdx << ", of file: " << a_fileName << std::endl;
+		return (false);
+	}
+	if (!checkValidDate(a_line, "0123456789,.-"))
+	{
+		return (false);
+	}
+	if (commapos == a_line.length() - 1)
+	{
+		std::cerr << "No value after date at: " << a_lineIdx << ", of file: " << a_fileName << std::endl;
+		return (false);
+	}
+	if (a_line.find_first_not_of("0123456789,.-") != std::string::npos)
+	{
+		std::cerr << "Not allowed character on line: " << a_lineIdx << ", of file: " << a_fileName << std::endl;
+		return (false);
+	}
+	if (a_line.find_first_not_of("0123456789.", commapos + 1) != std::string::npos)
+	{
+		std::cerr << "Error in value on line: " << a_lineIdx << ", of file: " << a_fileName << std::endl;
+		return (false);
+	}
+	return (true);
+}
+
+/**
+ * Return value from input after the separator position
+ * - checks if value has dot and is at same position
+ * - checks if dot is at correct position (after first number)
+ * - checks if value is in range of 0-1000
+ * @param a_str string with date and value 
+ * @param a_seperator_pos pos where parsing number starts
+ * @param a_clamp if number over 1000 is an error, default false
+ * @return converted value to double, or -1 on error
+ */
+static double	getValue(const std::string& a_str, const std::size_t a_seperator_pos, bool a_clamp = false)
+{
+	double		value = 0;
+	std::size_t	dot_pos;
+
+	if (a_seperator_pos == std::string::npos || (dot_pos = a_str.find('.', a_seperator_pos)) != a_str.find_last_of('.') 
+		|| (dot_pos != std::string::npos && dot_pos < a_str.find_first_of("0123456789", a_seperator_pos) && dot_pos != a_str.length() - 1)
+		|| a_str.find_first_not_of("0123456789.", a_seperator_pos) != std::string::npos)
+	{
+		std::cerr << "Error: bad input => " << a_str << std::endl;
+		return (-1);
+	}
+	value = std::strtod(a_str.substr(a_seperator_pos).c_str(), NULL);
+	if (value < 0 || (a_clamp && value > 1000))
+	{
+		std::cerr << "Error: " << (value < 0 ? "not a positive number." : "too large a number.") << std::endl;
+		return (-1);
+	}
+	return (value);
+}
+
 //loads Csv into m_exchangeData, also:
 // - checking if date is in correct format
 // - checking for comma seperator
@@ -58,7 +121,6 @@ bool	BitcoinExchange::loadCsv(std::string a_fileName)
 {
 	std::ifstream	input;
 	std::string		line;
-	std::size_t		commapos;
 	bool			is_success = true;
 
 	input.open(a_fileName.c_str());
@@ -71,33 +133,22 @@ bool	BitcoinExchange::loadCsv(std::string a_fileName)
 	std::getline(input, line); //removes first line. Change
 	if (line == "date,exchange_rate")
 	{
-		for (int i = 1; std::getline(input, line); ++i)
+		for (int i = 2; std::getline(input, line); ++i)
 		{
-			commapos = line.find(',');
-			if (!checkValidDate(line, "0123456789,.-"))
+			if (!checkValidDatabase(line, i, a_fileName))
 			{
 				is_success = false;
 				break;
 			}
-			if (commapos == std::string::npos)
+			std::size_t commapos = line.find(',');
+			double value = getValue(line, commapos + 1);
+			if (value == -1)
 			{
-				std::cerr << "No comma on line: " << i << ", of file: " << a_fileName << std::endl;
+				std::cerr << "Error in value on line: " << i << ", of file: " << a_fileName << std::endl;
 				is_success = false;
 				break;
 			}
-			if (commapos == line.length() - 1)
-			{
-				std::cerr << "No value after date at: " << i << ", of file: " << a_fileName << std::endl;
-				is_success = false;
-				break;
-			}
-			if (line.find_first_not_of("0123456789,.-") != std::string::npos)
-			{
-				std::cerr << "Not allowed character on line: " << i << ", of file: " << a_fileName << std::endl;
-				is_success = false;
-				break;
-			}
-			m_exchangeData[line.substr(0, commapos)] = std::strtod(line.substr(commapos + 1).c_str(), NULL);
+			m_exchangeData[line.substr(0, commapos)] = value;
 		}
 	}
 	else
@@ -106,31 +157,12 @@ bool	BitcoinExchange::loadCsv(std::string a_fileName)
 		is_success = false;
 	}
 	input.close();
+	if (m_exchangeData.size() == 0)
+	{
+		std::cerr << "Database empty!" << std::endl;
+		return (false);
+	}
 	return (is_success);
-}
-
-//Return value from input after '|'
-// - checks if pipe is in a_str string
-// - checks if pipe is followed by space and then value
-// - checks if value is in range of 0-1000 and positive
-static float	getMoneyValue(const std::string& a_str)
-{
-	std::size_t	pipepos = a_str.find('|');
-	double		value = 0;
-
-	if (pipepos == std::string::npos || a_str.find_first_of("0123456789", pipepos) != 13)
-	{
-		std::cerr << "Error: bad input => " << a_str << std::endl;
-		return (-1);
-	}
-
-	value = std::strtod(a_str.substr(pipepos + 1).c_str(), NULL);
-	if (value > 1000 || value < 0)
-	{
-		std::cerr << "Error: " << (value < 0 ? "not a positive number." : "too large a number.") << std::endl;
-		return (-1);
-	}
-	return (value);
 }
 
 //prints exchange rate in given format
@@ -144,7 +176,7 @@ bool	BitcoinExchange::printExchangeRate(std::string& a_line)
 		return (false);
 
 	pipe_pos = a_line.find('|');
-	if (pipe_pos != 11)
+	if (pipe_pos != 11 || pipe_pos >= a_line.length())
 	{
 		std::cerr << "Error: bad input => " << a_line << std::endl;
 		return (false);
@@ -152,7 +184,7 @@ bool	BitcoinExchange::printExchangeRate(std::string& a_line)
 
 	std::string	date = a_line.substr(0, pipe_pos - 1);
 	std::map<std::string, double>::iterator found_it = m_exchangeData.lower_bound(date);
-	float value = getMoneyValue(a_line);
+	double value = getValue(a_line, pipe_pos + 2, true);
 	if (value < 0)
 		return (false);
 	if (date < m_exchangeData.begin()->first)

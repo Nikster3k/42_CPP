@@ -47,36 +47,43 @@ void	RPN::addValue(char a_char)
 			throw (std::runtime_error("Error: operation with too few numbers."));
 		if (a_char == '*')
 		{
-			int a = m_calcs.top();
+			long a = m_calcs.top();
 			m_calcs.pop();
-			int b = m_calcs.top();
+			long b = m_calcs.top();
 			m_calcs.pop();
-			m_calcs.push(b * a);
+			m_calcs.push(checkOverflow(b * a));
 		}
 		else if (a_char == '+')
 		{
-			int a = m_calcs.top();
+			long a = m_calcs.top();
 			m_calcs.pop();
-			int b = m_calcs.top();
+			long b = m_calcs.top();
 			m_calcs.pop();
-			m_calcs.push(b + a);
+			m_calcs.push(checkOverflow(b + a));
 		}
 		else if (a_char == '-')
 		{
-			int a = m_calcs.top();
+			long a = m_calcs.top();
 			m_calcs.pop();
-			int b = m_calcs.top();
+			long b = m_calcs.top();
 			m_calcs.pop();
-			m_calcs.push(b - a);
+			m_calcs.push(checkOverflow(b - a));
 		}
 		else if (a_char == '/')
 		{
-			int a = m_calcs.top();
+			long a = m_calcs.top();
 			m_calcs.pop();
-			int b = m_calcs.top();
+			long b = m_calcs.top();
 			m_calcs.pop();
-			m_calcs.push(b / a);
+			m_calcs.push(checkOverflow(b / a));
 		}
 		// std::cout << m_calcs.top() << std::endl;
 	}
+}
+
+int	RPN::checkOverflow(long a_val)
+{
+	if (a_val > std::numeric_limits<int>::max())
+		throw(std::runtime_error("Error: calculation overflows"));
+	return (a_val);
 }
