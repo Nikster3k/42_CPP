@@ -1,17 +1,15 @@
 #ifndef PMERGEME_H
 # define PMERGEME_H
 
-#include <cstddef>
-#include <limits>
+#include <iostream>
 #include <string>
 #include <vector>
-#include <cstdlib>
-#include <string>
-#include <iostream>
+#include <deque>
+#include <limits>
 #include <ctime>
 #include <algorithm>
-#include <deque>
 #include <iomanip>
+#include <cmath>
 
 template <typename container = std::vector<int> >
 struct Block

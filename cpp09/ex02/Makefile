@@ -21,6 +21,6 @@ fclean: clean
 re:	fclean all
 
 run: $(NAME)
-	./$(NAME) `shuf -i 1-100000 -n 21 | tr "\n" " "`
+	./$(NAME) `shuf -i 1-100000 -n 3000 | tr "\n" " "`
 
 .PHONY:	clean fclean re all
