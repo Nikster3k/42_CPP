@@ -133,7 +133,7 @@ static void	insertion(Container<Block<Container<int, Alloc> >, Alloc>& a_main, C
 		}
 		s = i;
 	}
-	sorted.reserve(a_input.size());
+	// sorted.reserve(a_input.size());
 	for (std::size_t i = 0; i < a_main.size(); i++)
 	{
 		sorted.insert(sorted.end(), a_main.at(i).begin, a_main.at(i).end);
@@ -235,9 +235,9 @@ void	PmergeMeVector(std::string a_input)
 		<< "Time to process a range of " << values.size() << " elements with std::vector : "
 		<< static_cast<double>(t) / CLOCKS_PER_SEC * 1000000 << " us" << std::endl;
 
-	// checker(values);
+	checker(values);
 
-	// std::cout << "Comparisons: " << g_comparisons << std::endl;
+	std::cout << "Comparisons: " << g_comparisons << std::endl;
 }
 
 
@@ -266,109 +266,6 @@ static std::deque<int>	strToDeque(std::string a_input)
 	return (values);
 }
 
-static std::deque<std::pair<t_qBlock, t_qBlock> > intDeqToPair(std::deque<int>& a_vec, std::size_t a_blockSize)
-{
-	std::deque<std::pair<t_qBlock, t_qBlock> >	pairs;
-	t_qBlock	lhs;
-	t_qBlock	rhs;
-	std::size_t iterSize = a_vec.size() / (a_blockSize * 2);
-	for (std::size_t i = 0; i < iterSize; ++i)
-	{
-		lhs.begin = a_vec.begin() + i * a_blockSize * 2;
-		lhs.end = lhs.begin + a_blockSize;
-		rhs.begin = lhs.end;
-		rhs.end = rhs.begin + a_blockSize;
-		g_comparisons++;
-		if (lhs < rhs)
-			t_qBlock::swapValues(lhs, rhs);
-		pairs.push_back(std::make_pair(lhs, rhs));
-	}
-	return (pairs);
-}
-
-static long	binaryInsertDeque(std::deque<t_qBlock >& a_main, int val, int maxIdx)
-{
-	long	start = 0;
-	long	end = maxIdx;
-	long	midpoint = 0;
-	bool	isLessEqual;
-	
-	while (start <= end)
-	{
-		midpoint = (end - start) / 2 + start;
-		g_comparisons++;
-		isLessEqual = val <= *a_main.at(midpoint).begin;
-		if (isLessEqual)
-			end = midpoint - 1;
-		else
-			start = midpoint + 1;
-	}
-	if (!isLessEqual)
-		midpoint++;
-	return (midpoint);
-}
-
-static void	insertionDeque(std::deque<t_qBlock >& a_main, std::deque<t_qBlock >& a_pend, std::deque<int>& a_input, std::size_t a_blockSize)
-{
-	std::deque<int> sorted;
-	std::size_t iter = 1;
-	std::size_t s = 0;
-	std::size_t i = 1;
-	std::size_t added = 0;
-
-	a_main.insert(a_main.begin(), a_pend.front());
-
-	while (s < a_pend.size())
-	{
-		i = 2 * jakobsthalZahl(iter++);
-		for (std::size_t x = i; x > s; --x)
-		{
-			if (x >= a_pend.size())
-				continue;
-			long index = binaryInsertDeque(a_main, *a_pend.at(x).begin, x + (added++));
-			a_main.insert(a_main.begin() + index, a_pend.at(x));
-		}
-		s = i;
-	}
-	for (std::size_t i = 0; i < a_main.size(); i++)
-	{
-		sorted.insert(sorted.end(), a_main.at(i).begin, a_main.at(i).end);
-	}
-	sorted.insert(sorted.end(), a_input.begin() + a_main.size() * a_blockSize, a_input.end());
-	a_input = sorted;
-}
-
-static void	mergeInsertDeque(std::deque<int>& a_input, std::size_t a_steps)
-{
-	std::size_t	blockSize = 1 << a_steps;
-	if (a_input.size() < blockSize * 2)
-		return;
-
-	std::deque<std::pair<t_qBlock , t_qBlock > >	pairVect = intDeqToPair(a_input, blockSize);
-	mergeInsertDeque(a_input, a_steps + 1);
-	
-	std::deque<t_qBlock > main;
-	std::deque<t_qBlock > pend;
-
-	std::size_t	iter = a_input.size() / (blockSize << 1);
-	if (iter != 1 && iter % 2)
-		iter--;
-	std::size_t i = 0;
-	for (; i < iter; i++)
-	{
-		main.push_back(pairVect.at(i).first);
-		pend.push_back(pairVect.at(i).second);
-	}
-	for (; i < pairVect.size(); i++)
-	{
-		pend.push_back(pairVect.at(i).first);
-		pend.push_back(pairVect.at(i).second);
-	}
-	if (blockSize == 1 && a_input.size() % 2)
-		pend.push_back(t_qBlock (a_input.end() - 1, a_input.end()));
-	insertionDeque(main, pend, a_input, blockSize);
-}
-
 void	PmergeMeDeque(std::string a_input)
 {
 	std::deque<int>	values = strToDeque(a_input);
@@ -378,7 +275,7 @@ void	PmergeMeDeque(std::string a_input)
 	// printSubject(values);
 	std::clock_t t;
 	t = std::clock();
-	mergeInsertDeque(values, 0);
+	mergeInsert(values, 0);
 	t = std::clock() - t;
 	// std::cout << "After: ";
 	// printSubject(values);
@@ -386,7 +283,7 @@ void	PmergeMeDeque(std::string a_input)
 		<< "Time to process a range of " << values.size() << " elements with std::deque : "
 		<< static_cast<double>(t) / CLOCKS_PER_SEC * 1000000 << " us" << std::endl;
 
-	// checker(values);
+	checker(values);
 
-	// std::cout << "Comparisons: " << g_comparisons << std::endl;
+	std::cout << "Comparisons: " << g_comparisons << std::endl;
 }
