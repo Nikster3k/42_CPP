@@ -51,7 +51,7 @@ static	bool	checkValidDate(const std::string& a_str, const std::string& allowed)
 	return (true);
 }
 
-bool	BitcoinExchange::checkValidDatabase(const std::string& a_line, int a_lineIdx, const std::string& a_fileName) const
+bool	BitcoinExchange::checkValidDbLine(const std::string& a_line, int a_lineIdx, const std::string& a_fileName) const
 {
 	std::size_t		commapos;
 	commapos = a_line.find(',');
@@ -95,11 +95,16 @@ bool	BitcoinExchange::checkValidDatabase(const std::string& a_line, int a_lineId
 static float	getValue(const std::string& a_str, const std::size_t a_seperator_pos, bool a_clamp = false)
 {
 	float	value = 0;
-	std::size_t	dot_pos;
+	std::size_t	dot_pos = a_str.find('.', a_seperator_pos);
+	std::size_t	num_pos = num_pos = a_str.find_first_of("0123456789", a_seperator_pos);
 
-	if (a_seperator_pos == std::string::npos || (dot_pos = a_str.find('.', a_seperator_pos)) != a_str.find_last_of('.') 
-		|| (dot_pos != std::string::npos && dot_pos < a_str.find_first_of("0123456789", a_seperator_pos) && dot_pos != a_str.length() - 1)
-		|| a_str.find_first_not_of("0123456789.", a_seperator_pos) != std::string::npos)
+	if (a_str == "2024-03-31 | 0.")
+		std::cout << "Dot: " << dot_pos << "len " << a_str.length() - 1 << std::endl;
+	if (a_seperator_pos == std::string::npos
+		|| dot_pos != a_str.find_last_of('.')														//check for only one dot
+		|| (dot_pos != std::string::npos && (dot_pos < num_pos || dot_pos == a_str.length() - 1))	//check for ".", ".0", "0."
+		|| num_pos == std::string::npos																//check for no num
+		|| a_str.find_first_not_of("0123456789.", a_seperator_pos) != std::string::npos)			//check for '|', ',', '-'
 	{
 		std::cerr << "Error: bad input => " << a_str << std::endl;
 		return (-1);
@@ -130,12 +135,12 @@ bool	BitcoinExchange::loadCsv(std::string a_fileName)
 		return (false);
 	}
 
-	std::getline(input, line); //removes first line. Change
+	std::getline(input, line);
 	if (line == "date,exchange_rate")
 	{
 		for (int i = 2; std::getline(input, line); ++i)
 		{
-			if (!checkValidDatabase(line, i, a_fileName))
+			if (!checkValidDbLine(line, i, a_fileName))
 			{
 				is_success = false;
 				break;
