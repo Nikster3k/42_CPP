@@ -25,24 +25,30 @@ static	bool	checkValidDate(const std::string& a_str, const std::string& allowed)
 {
 	static int days_in_months[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 	std::size_t	hyphen_pos = a_str.find('-');
-	
+	int year;
+	int month;
+	int day;
+
 	if (a_str.find_first_not_of(allowed) != std::string::npos || hyphen_pos != 4)
 	{
 		std::cerr << "Error: bad input => " << a_str << std::endl;
 		return (false);
 	}
-	// int year = std::atoi(a_str.substr(0, hyphen_pos + 1).c_str());
-	// if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)
-	// 	std::cout << "schaltjahr\n";
+	year = std::atoi(a_str.substr(0, hyphen_pos).c_str());
+	if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)
+		days_in_months[1] = 29;
+	else
+		days_in_months[1] = 28;
 
-	int month = std::atoi(a_str.substr(hyphen_pos + 1).c_str());
-	if (month < 1 || month > 12 || (hyphen_pos = a_str.find('-', hyphen_pos + 1)) != 7)
+	month = std::atoi(a_str.substr(hyphen_pos + 1).c_str());
+	hyphen_pos = a_str.find('-', hyphen_pos + 1);
+	if (month < 1 || month > 12 || hyphen_pos != 7)
 	{
 		std::cerr << "Error: bad input => " << a_str << std::endl;
 		return (false);
 	}
 
-	int day = std::atoi(a_str.substr(hyphen_pos + 1).c_str());
+	day = std::atoi(a_str.substr(hyphen_pos + 1).c_str());
 	if (day < 1 || day > days_in_months[month - 1])
 	{
 		std::cerr << "Error: bad input => " << a_str << std::endl;
@@ -223,6 +229,6 @@ void	BitcoinExchange::makeExchange(std::string a_fileName)
 		}
 	}
 	else
-		std::cerr << "Input wrong format => " << line << std::endl;
+		std::cerr << "Input wrong format => \"" << line << '"' << std::endl;
 	input.close();
 }
